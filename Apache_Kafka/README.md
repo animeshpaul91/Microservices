@@ -48,7 +48,7 @@
 ## Consumer offsets:
 * Kafka stores the offsets at which a consumer group has been reading.
 * The offsets committed live in a kafka topic named **__consumer_offets**.
-* When a consumer in a group has processed data received from kafka, it commits the offets.
+* When a consumer in a group has processed data received from kafka, it commits the offsets.
 * If a consumer dies, it will be able to read back from where it left off.
 * Consumers choose when to commit offsets. This gives with 3 delivery semantics.
 * At most once: offsets are committed as soon as the message is received. If the processing goes wrong, the message will be lost (it won't be read again).
