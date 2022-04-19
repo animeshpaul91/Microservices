@@ -54,3 +54,25 @@
 * At most once: offsets are committed as soon as the message is received. If the processing goes wrong, the message will be lost (it won't be read again).
 * At least once: offsets are committed after a message is processed successfully. If the processing goes wrong, the message will be read again. Since, this can result in duplicate messages, processing system needs to be idempotent.
 * Exactly once: for Kafka => External System Workflows, use an idempotent consumer.
+
+## Kafka Broker Discovery
+* Every kafka broker is also called a **bootstrap server**.
+* This means you need to connect to only one broker, and you will be connected to the entire cluster.
+* Each broker knows about all brokers, topics and partitions (metadata).
+* A client can connect to any broker and can fetch all this metadata.
+
+## Zookeeper
+* Zookeeper manages brokers (keeps a list of them).
+* Zookeeper helps in performing leader election for partitions.
+* Zookeeper sends notifications to kafka in case of changes (new topic, broker dies, broker comes up, delete topics).
+* Apache kakfa cannot work without Zookeeper.
+* Zookeeper by design operates with an odd number of servers (3, 5, 7).
+* Zookeeper has a leader that handles writes. The rest of the servers are followers which handle reads. The leader can also handle reads.
+* Zookeeper does **NOT** store consumer offsets with kafka > v0.10.
+
+## Kafka Guarantees
+* Messages are appended to a topic-partition in the order they are sent.
+* Consumers read messages in the order stored in a topic-partition.
+* With a replication factor of N, producers and consumers can tolerate upto N-1 brokers being down.
+* This is why a replication factor of 3 is a good idea. It allows for 1 broker to be taken down for maintenance. It tolerates the unexpected shutdown of 1 broker.
+* As long as the number of partitions remains constant for a topic (no new partitions), the same key will always go to the same partition.
