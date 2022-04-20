@@ -24,6 +24,7 @@
 * **Only that leader can receive and serve data for a partition**. Other brokers will synchronize the data.
 * **Therefore, each partition has only one leader and multiple ISRs (in-sync replica)**.
 * If a leader dies, then a replica becomes a leader _(gets promoted to a leader)_.
+* You cannot create a replication factor greater than the number of available brokers.
 
 ## Producers:
 * Producers write data to topics (which is made of partitions). Producers automatically know to which broker and partition to write to.
