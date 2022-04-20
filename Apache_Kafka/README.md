@@ -77,3 +77,14 @@
 * With a replication factor of N, producers and consumers can tolerate upto N-1 brokers being down.
 * This is why a replication factor of 3 is a good idea. It allows for 1 broker to be taken down for maintenance. It tolerates the unexpected shutdown of 1 broker.
 * As long as the number of partitions remains constant for a topic (no new partitions), the same key will always go to the same partition.
+
+
+# Kafka CLI Documentation
+## Create Topic
+`kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --partitions 3 --replication-factor 1 --create`
+## List Topics
+`kafka-topics.sh --bootstrap-server localhost:9092 --list`
+## Describe Topic
+`kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --describe`
+## Delete a topic
+`kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --delete`
