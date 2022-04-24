@@ -100,6 +100,14 @@
 
 # Kafka CLI Documentation (v3.1.0)
 
+## Start Zookeeper
+
+`zookeeper-server-start.sh config/zookeeper.properties`
+
+## Start Kafka Server
+
+`kafka-topics.sh --bootstrap-^Crver localhost:9092 --list`
+
 ## Create Topic
 
 `kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --partitions 3 --replication-factor 1 --create`
@@ -108,6 +116,10 @@
 
 `kafka-topics.sh --bootstrap-server localhost:9092 --list`
 
+## List topics with partitions and replication information
+
+`kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --describe`
+
 ## Describe Topic
 
 `kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --describe`
@@ -115,3 +127,41 @@
 ## Delete a topic
 
 `kafka-topics.sh --bootstrap-server localhost:9092 --topic firstTopic --delete`
+
+## Produce Messages to a topic
+
+`kafka-console-producer.sh --bootstrap-server localhost:9092 --broker-list localhost:9092 --topic firstTopic`
+
+## Consume Messages from a topic
+
+#### This resets the consumer offset
+
+`kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic firstTopic`
+`kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic firstTopic --from-beginning`
+
+## Consume Messages in Consumer Group
+
+### Different consumers read data from different partitions of the topic. Essentially they lead-balance the consumption
+
+`kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic firstTopic --group my-first-application`
+
+#### From beginning with a new consumer group will read all new messages
+
+`kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic firstTopic --group my-fifth-application --from-beginning`
+
+## List Consumer Groups
+
+`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list`
+
+## Describe Consumer Group
+
+`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-first-application`
+
+## Reset Offsets
+
+`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --execute --topic firstTopic`
+
+### This should reset offsets to the left by 2 for all partitions. Reading again will generate 6 messages
+
+`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --shift-by -2 --execute --topic firstTopic`
+
