@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class ProducerDemoWithKeys {
-    private static final Logger logger = LoggerFactory.getLogger(ProducerDemoWithCallBack.class); // creates a logger for this class
+    private static final Logger logger = LoggerFactory.getLogger(ProducerDemoWithKeys.class); // creates a logger for this class
 
     private static void produceSimpleMessageWithKeys() throws ExecutionException, InterruptedException {
         final String bootstrapServers = "127.0.0.1:9092";

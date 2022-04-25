@@ -16,6 +16,7 @@ public class ProducerDemo {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
         // key and value serializer lets kafka know what type of value we are sending over kafka
+        // Producer serializes string to bytes
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
@@ -23,7 +24,8 @@ public class ProducerDemo {
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
         // create producer record
-        ProducerRecord<String, String> producerRecord = new ProducerRecord<>("firstTopic", "Hello World");
+        final String topicName = "firstTopic";
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topicName, "Hello World");
 
         // send data - asynchronous
         producer.send(producerRecord);
