@@ -14,16 +14,16 @@ public class ConsumerDemoWithThreads {
         final String topicName = "firstTopic";
 
         // latch for dealing with multiple threads
-        CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
 
         // create the consumer runnable
-        ConsumerRunnable myConsumerRunnable = new ConsumerRunnable(bootstrapServers, groupId, topicName, latch);
+        final ConsumerRunnable myConsumerRunnable = new ConsumerRunnable(bootstrapServers, groupId, topicName, latch);
         logger.info("Creating Consumer Thread");
-        Thread myThread = new Thread(myConsumerRunnable);
+        final Thread myThread = new Thread(myConsumerRunnable);
         myThread.start(); // start the task
 
         // add a shutdown hook
-        Thread shutdownHookThread = new Thread(() -> {
+        final Thread shutdownHookThread = new Thread(() -> {
             logger.info("Caught shutdown Hook");
             myConsumerRunnable.shutdown();
             try {
