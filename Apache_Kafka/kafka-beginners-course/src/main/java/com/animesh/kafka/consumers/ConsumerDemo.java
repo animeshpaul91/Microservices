@@ -40,7 +40,7 @@ public class ConsumerDemo {
         consumer.subscribe(Collections.singleton(topicName));
 
         // poll for new data
-        while (true) {
+        while (true) { // busy waiting
             final ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
                 logger.info("Key: " + record.key() + ", Value: " + record.value());
