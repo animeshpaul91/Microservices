@@ -42,7 +42,7 @@ public class ConsumerDemoAssignSeek {
         final int partitionId = 0;
         TopicPartition topicPartition = new TopicPartition(topicName, partitionId);
         consumer.assign(Collections.singletonList(topicPartition));
-        long offsetToReadFrom = 60L;
+        long offsetToReadFrom = 50L;
 
         // seek
         consumer.seek(topicPartition, offsetToReadFrom);
