@@ -13,6 +13,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <kafka.client.version>3.1.0</kafka.client.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <twitter.rest.client.version>2.2.0</twitter.rest.client.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- REST Client for Twitter API -->
+        <dependency>
+            <groupId>com.twitter</groupId>
+            <artifactId>hbc-core</artifactId> <!-- or hbc-twitter4j -->
+            <version>${twitter.rest.client.version}</version> <!-- or whatever the latest version is -->
         </dependency>
     </dependencies>
 
