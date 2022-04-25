@@ -1,4 +1,4 @@
-package com.animesh.kafka.helloworld;
+package com.animesh.kafka.producers;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
