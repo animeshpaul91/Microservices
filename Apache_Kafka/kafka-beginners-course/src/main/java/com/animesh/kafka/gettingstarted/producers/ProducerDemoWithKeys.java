@@ -1,4 +1,4 @@
-package com.animesh.kafka.producers;
+package com.animesh.kafka.gettingstarted.producers;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -8,11 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
-public class ProducerDemoWithCallBack {
-    private static final Logger logger = LoggerFactory.getLogger(ProducerDemoWithCallBack.class); // creates a logger for this class
+public class ProducerDemoWithKeys {
+    private static final Logger logger = LoggerFactory.getLogger(ProducerDemoWithKeys.class); // creates a logger for this class
 
-    private static void produceSimpleMessage() {
+    private static void produceSimpleMessageWithKeys() throws ExecutionException, InterruptedException {
         final String bootstrapServers = "127.0.0.1:9092";
 
         // create Producer Properties
@@ -25,10 +26,17 @@ public class ProducerDemoWithCallBack {
 
         // create the producer. Key is the topic name and value is the actual message that needs to be sent
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
+        final String topicName = "firstTopic";
 
-        for (int i = 1; i < 11; i++) {
+        // create producer record
+        for (int i = 0; i < 10; i++) {
             // create producer record
-            ProducerRecord<String, String> producerRecord = new ProducerRecord<>("firstTopic", "Hello World " + i);
+            final String message = "Hello World " + i;
+            final String key = "id_" + i;
+
+            ProducerRecord<String, String> producerRecord = new ProducerRecord<>(topicName, key, message);
+
+            logger.info("Key: " + key);
 
             // send data - asynchronous. This is a Non-Blocking call.
             producer.send(producerRecord, (recordMetadata, exception) -> {
@@ -42,17 +50,17 @@ public class ProducerDemoWithCallBack {
                 } else {
                     logger.error("Error while Producing occurred: ", exception);
                 }
-            });
+            }).get(); // block send to make it synchronous to see if the same key goes to the same partition
         }
 
-        // flush record from buffer and waits for the request to complete. This is a blocking call
+        // flush data blocking call. Main thread waits for all threads to finish
         producer.flush();
 
         // flush and close
         producer.close();
     }
 
-    public static void main(String[] args) {
-        produceSimpleMessage();
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        produceSimpleMessageWithKeys();
     }
 }

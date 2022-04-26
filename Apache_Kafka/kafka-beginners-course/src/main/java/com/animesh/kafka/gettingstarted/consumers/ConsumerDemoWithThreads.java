@@ -1,4 +1,4 @@
-package com.animesh.kafka.consumers;
+package com.animesh.kafka.gettingstarted.consumers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
