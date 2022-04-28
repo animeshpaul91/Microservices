@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 public class TwitterProducer {
     private static final Logger logger = LoggerFactory.getLogger(TwitterProducer.class);
 
-    private static final String consumerKey = "consumerKey";
-    private static final String consumerSecret = "consumerSecret";
-    private static final String token = "token";
-    private static final String tokenSecret = "tokenSecret";
+    private static final String consumerKey = "CONSUMER_KEY";
+    private static final String consumerSecret = "CONSUMER_SECRET";
+    private static final String token = "TOKEN";
+    private static final String tokenSecret = "TOKEN_SECRET";
 
     private static final String CONSUMER_KEY = Optional.ofNullable(System.getenv(consumerKey)).orElseThrow(() -> new RuntimeException(consumerKey + " not set in the environment"));
     private static final String CONSUMER_SECRET = Optional.ofNullable(System.getenv(consumerSecret)).orElseThrow(() -> new RuntimeException(consumerSecret + " not set in the environment"));
