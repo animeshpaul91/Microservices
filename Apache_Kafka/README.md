@@ -172,3 +172,12 @@
 * While keeping ordering guarantees and improving performance.
 
 
+## Batching in Production of Data
+* Kafka can send upto 5 requests in flight.
+* Kafka batches messages and sends all these batched messages in one request. This is called smart batching.
+* Batches have high compression ratio.
+
+### There are two settings for this
+* Linger.ms: # of milliseconds a producer is willing to wait before sending out a batch (default 0).
+* batch.size: Maximum # of bytes that will be included in a batch (default 16KB).
+* A batch is allocated per partition, so setting it to a number too high might cause to run out of memory in the partition.

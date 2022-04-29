@@ -37,7 +37,7 @@ public class TwitterProducer {
     private static final String TOKEN = Optional.ofNullable(System.getenv(token)).orElseThrow(() -> new RuntimeException(token + " not set in the environment"));
     private static final String TOKEN_SECRET = Optional.ofNullable(System.getenv(tokenSecret)).orElseThrow(() -> new RuntimeException(tokenSecret + " not set in the environment"));
 
-    private static final List<String> terms = Lists.newArrayList("kafka"); //search string
+    private static final List<String> terms = Lists.newArrayList("kafka", "bitcoin", "trump"); //search string
 
     private static Client createTwitterClient(BlockingQueue<String> msgQueue) {
         /* Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
@@ -129,6 +129,10 @@ public class TwitterProducer {
         properties.setProperty(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
         properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
 
+        // high throughput producer (at the expense of a bit of latency and CPU usage)
+        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
+        properties.setProperty(ProducerConfig.LINGER_MS_CONFIG, "20");
+        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(32 * 1024));
 
         // create the producer. Key is the topic name and value is the actual message that needs to be sent
         return new KafkaProducer<>(properties);
