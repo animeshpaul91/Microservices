@@ -1,4 +1,4 @@
-package com.animesh.kafka.twitter.producers;
+package producers;
 
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;

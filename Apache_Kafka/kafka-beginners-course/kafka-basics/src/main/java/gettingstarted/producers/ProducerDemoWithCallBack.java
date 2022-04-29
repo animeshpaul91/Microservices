@@ -1,4 +1,4 @@
-package com.animesh.kafka.gettingstarted.producers;
+package gettingstarted.producers;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;

@@ -1,4 +1,4 @@
-package com.animesh.kafka.gettingstarted.consumers;
+package gettingstarted.consumers;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
