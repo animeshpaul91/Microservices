@@ -12,8 +12,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
@@ -72,7 +72,7 @@ public class ElasticSearchConsumer {
         // disable auto commit of offsets
         properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
-        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "100");
 
         // create consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
@@ -86,30 +86,35 @@ public class ElasticSearchConsumer {
 
         while (true) {
             final ConsumerRecords<String, String> batchOfRecords = consumer.poll(Duration.ofMillis(100)); // this is a batch
+            final int recordCount = batchOfRecords.count();
+            logger.info("Received " + recordCount + " count");
 
-            logger.info("Received " + batchOfRecords.count() + " count");
+            BulkRequest bulkRequest = new BulkRequest();
             for (ConsumerRecord<String, String> record : batchOfRecords) {
                 // Create Kafka Generic ID
                 // final String id = record.topic() + "_" + record.partition() + "_" + record.offset();
-
-                // Twitter Feed Specific ID
-                final String tweetId = extractIdFromTweet(record.value());
-                // insert data into elastic search
-                IndexRequest indexRequest = new IndexRequest("twitter", "tweets", tweetId)
-                        .source(record.value(), XContentType.JSON); // tweetId will make ElasticSearch to avoid duplicates and update same record
-                // This preserves Idempotency.
-
-                IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-                String indexResponseId = indexResponse.getId();
-                logger.info("IndexResponseId: " + indexResponseId);
-                Thread.sleep(10);
+                try {
+                    // Twitter Feed Specific ID
+                    final String tweetId = extractIdFromTweet(record.value());
+                    // insert data into elastic search
+                    IndexRequest indexRequest = new IndexRequest("twitter", "tweets", tweetId)
+                            .source(record.value(), XContentType.JSON); // tweetId will make ElasticSearch to avoid duplicates and update same record
+                    // This preserves Idempotency.
+                    bulkRequest.add(indexRequest); // add to our bulk request
+                } catch (NullPointerException exception) {
+                    logger.warn("Skipping Bad Data: " + record.value());
+                }
             }
 
-            // At this point the batch of messages has been already processed
-            logger.info("Committing offsets");
-            consumer.commitSync();
-            logger.info("Offsets Committed");
-            Thread.sleep(1000);
+            if (recordCount > 0) {
+                client.bulk(bulkRequest, RequestOptions.DEFAULT);
+                Thread.sleep(10);
+                // At this point the batch of messages has been already processed
+                logger.info("Committing offsets");
+                consumer.commitSync();
+                logger.info("Offsets Committed");
+                Thread.sleep(1000);
+            }
         }
     }
 
