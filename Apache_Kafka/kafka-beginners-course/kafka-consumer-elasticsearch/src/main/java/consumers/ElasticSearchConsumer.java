@@ -73,7 +73,7 @@ public class ElasticSearchConsumer {
         return consumer;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    private static void runner() throws IOException, InterruptedException {
         RestHighLevelClient client = createClient();
         KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets");
 
@@ -90,5 +90,9 @@ public class ElasticSearchConsumer {
                 Thread.sleep(1000);
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        runner();
     }
 }
