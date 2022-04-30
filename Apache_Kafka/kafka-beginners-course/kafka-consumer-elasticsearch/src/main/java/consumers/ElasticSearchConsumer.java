@@ -69,6 +69,11 @@ public class ElasticSearchConsumer {
         // earliest means consumer will read from the very beginning of the topic
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
+        // disable auto commit of offsets
+        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
+
         // create consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
         consumer.subscribe(Collections.singletonList(topicName));
@@ -80,8 +85,10 @@ public class ElasticSearchConsumer {
         KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets");
 
         while (true) {
-            final ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-            for (ConsumerRecord<String, String> record : records) {
+            final ConsumerRecords<String, String> batchOfRecords = consumer.poll(Duration.ofMillis(100)); // this is a batch
+
+            logger.info("Received " + batchOfRecords.count() + " count");
+            for (ConsumerRecord<String, String> record : batchOfRecords) {
                 // Create Kafka Generic ID
                 // final String id = record.topic() + "_" + record.partition() + "_" + record.offset();
 
@@ -95,8 +102,14 @@ public class ElasticSearchConsumer {
                 IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
                 String indexResponseId = indexResponse.getId();
                 logger.info("IndexResponseId: " + indexResponseId);
-                Thread.sleep(1000);
+                Thread.sleep(10);
             }
+
+            // At this point the batch of messages has been already processed
+            logger.info("Committing offsets");
+            consumer.commitSync();
+            logger.info("Offsets Committed");
+            Thread.sleep(1000);
         }
     }
 
