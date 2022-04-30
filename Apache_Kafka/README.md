@@ -181,3 +181,6 @@
 * Linger.ms: # of milliseconds a producer is willing to wait before sending out a batch (default 0).
 * batch.size: Maximum # of bytes that will be included in a batch (default 16KB).
 * A batch is allocated per partition, so setting it to a number too high might cause to run out of memory in the partition.
+
+### Replay Data by resetting all consumer offsets of a consumer group
+`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group kafka-demo-elasticsearch --reset-offsets --execute --to-earliest --topic twitter_tweets`
