@@ -1,6 +1,7 @@
 package consumers;
 
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -29,6 +30,7 @@ import java.util.Properties;
 
 public class ElasticSearchConsumer {
     private static final Logger logger = LoggerFactory.getLogger(ElasticSearchConsumer.class);
+    private static final JsonParser jsonParser = new JsonParser();
 
     private static RestHighLevelClient createClient() {
         final String hostnameEnvKey = "HOSTNAME";
@@ -80,16 +82,30 @@ public class ElasticSearchConsumer {
         while (true) {
             final ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
+                // Create Kafka Generic ID
+                // final String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+
+                // Twitter Feed Specific ID
+                final String tweetId = extractIdFromTweet(record.value());
                 // insert data into elastic search
-                IndexRequest indexRequest = new IndexRequest("twitter", "tweets")
-                        .source(record.value(), XContentType.JSON);
+                IndexRequest indexRequest = new IndexRequest("twitter", "tweets", tweetId)
+                        .source(record.value(), XContentType.JSON); // tweetId will make ElasticSearch to avoid duplicates and update same record
+                // This preserves Idempotency.
 
                 IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-                String id = indexResponse.getId();
-                logger.info("Id: " + id);
+                String indexResponseId = indexResponse.getId();
+                logger.info("IndexResponseId: " + indexResponseId);
                 Thread.sleep(1000);
             }
         }
+    }
+
+    private static String extractIdFromTweet(String tweetJson) {
+        // using gson
+        return jsonParser.parse(tweetJson)
+                .getAsJsonObject()
+                .get("id_str")
+                .getAsString();
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
