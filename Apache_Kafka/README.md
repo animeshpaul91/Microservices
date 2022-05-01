@@ -24,7 +24,7 @@
 
 ## Topic Replication:
 
-* Topics should have a replication factor > 1 (Usually 3). This way, if a broker is down, another broker can serve data.
+* Topics should have a replication factor > 1 (Usually 3, Maximum 4). This way, if a broker is down, another broker can serve data.
 * **A replication factor of n means that each partition in the topic is replicated n times**.
 * **Concept of leader of a partition: At any point in time, only ONE broker can be a leader of a partition**.
 * **Only that leader can receive and serve data for a partition**. Other brokers will synchronize the data.
