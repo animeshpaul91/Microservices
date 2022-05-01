@@ -80,9 +80,9 @@ public class ElasticSearchConsumer {
         return consumer;
     }
 
-    private static void runner() throws IOException, InterruptedException {
+    private static void runner(String topicName) throws IOException, InterruptedException {
         RestHighLevelClient client = createClient();
-        KafkaConsumer<String, String> consumer = createConsumer("twitter_tweets");
+        KafkaConsumer<String, String> consumer = createConsumer(topicName);
 
         while (true) {
             final ConsumerRecords<String, String> batchOfRecords = consumer.poll(Duration.ofMillis(100)); // this is a batch
@@ -127,6 +127,8 @@ public class ElasticSearchConsumer {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        runner();
+        // runner("twitter_tweets");
+        String topicName = "filtered_tweets";
+        runner(topicName);
     }
 }
