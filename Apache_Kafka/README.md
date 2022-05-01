@@ -179,8 +179,23 @@
 
 ### There are two settings for this
 * Linger.ms: # of milliseconds a producer is willing to wait before sending out a batch (default 0).
-* batch.size: Maximum # of bytes that will be included in a batch (default 16KB).
-* A batch is allocated per partition, so setting it to a number too high might cause to run out of memory in the partition.
+* batch.size: Maximum # of bytes that will be included in a batch (default 16 KB).
+* A batch is allocated per partition, so setting it to a number too high might cause running out of memory in the partition.
 
 ### Replay Data by resetting all consumer offsets of a consumer group
 `kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group kafka-demo-elasticsearch --reset-offsets --execute --to-earliest --topic twitter_tweets`
+
+## Schema Registry and its need
+* Structure or schema of data published might change which can cause consumers to break.
+* Kafka Brokers do not validate bytes. They just receive and store into partitions and offsets.
+* The schema registry has to be a separate component. 
+* Producers and Consumers need to be able to talk to it.
+* A common data format must be agreed upon.
+* Apache Avro is a data format under the Confluent Schema Registry.
+
+## Purpose of Confluent Schema Registry
+* Store and Retrieve schemas for Producers and Consumers.
+* Enforce backward/Forward/Full compatibility on topics.
+* Decrease the size of the payload of data sent to kafka.
+
+![Avro_Schema_Registry](Schema_Registry.png)
