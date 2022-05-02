@@ -164,8 +164,8 @@
 ### This should reset offsets to the left by 2 for all partitions. Reading again will generate 6 messages
 `kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --shift-by -2 --execute --topic firstTopic`
 
-## Idemptence Properties
-`enable.idempotence = true` (Producer Level) and `min.insync.replicas = 2` (Broker/Topic Level. This is the minimum # of insync replicas that need to acknowledge) implies:
+## Idempotency Properties
+`enable.idempotence = true` (Producer Level) and `min.insync.replicas = 2` (Broker/Topic Level. This is the minimum # of in sync replicas that need to acknowledge) implies:
 * `acks = all`
 * `retries = MAX_INT`
 * `max.in.flight.requests.per.connection = 5`
