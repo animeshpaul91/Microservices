@@ -1,2 +1,10 @@
+GET http://localhost:8082/movies/1
+Accept: application/json
+
+###
+GET http://localhost:8083/ratingsdata/movies/1
+Accept: application/json
+
+###
 GET http://localhost:8081/catalog/1
 Accept: application/json
