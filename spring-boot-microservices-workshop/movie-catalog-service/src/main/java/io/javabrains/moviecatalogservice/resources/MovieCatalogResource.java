@@ -3,6 +3,7 @@ package io.javabrains.moviecatalogservice.resources;
 import io.javabrains.moviecatalogservice.models.CatalogItem;
 import io.javabrains.moviecatalogservice.models.Movie;
 import io.javabrains.moviecatalogservice.models.Rating;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,11 +18,16 @@ import java.util.stream.Collectors;
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
 
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public MovieCatalogResource(final RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @RequestMapping("/{userId}")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
         // get all rated movie IDs
-        final RestTemplate restTemplate = new RestTemplate();
-
         final List<Rating> ratings = new ArrayList<>(Arrays.asList(
                 new Rating("1234", 4),
                 new Rating("5678", 3)
@@ -31,8 +37,6 @@ public class MovieCatalogResource {
         return ratings.stream()
                 .map(rating -> getCatalogItem(rating, restTemplate))
                 .collect(Collectors.toList());
-
-        // return Collections.singletonList(new CatalogItem("Schindler's List", "Holocaust", 9));
     }
 
     private CatalogItem getCatalogItem(Rating rating, RestTemplate restTemplate) {
