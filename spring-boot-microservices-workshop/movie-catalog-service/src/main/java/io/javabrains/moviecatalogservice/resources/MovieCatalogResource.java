@@ -2,6 +2,7 @@ package io.javabrains.moviecatalogservice.resources;
 
 import io.javabrains.moviecatalogservice.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,8 @@ public class MovieCatalogResource {
     private final RestTemplate restTemplate;
     private final WebClient webClient;
 
+    private DiscoveryClient discoveryClient;
+
     // the movie-info-service performs as a key for service discovery
     private static final String GET_MOVIES_ENDPOINT = "http://movie-info-service/movies/";
 
@@ -36,9 +39,10 @@ public class MovieCatalogResource {
     );
 
     @Autowired
-    public MovieCatalogResource(final RestTemplate restTemplate, final WebClient webClient) {
+    public MovieCatalogResource(final RestTemplate restTemplate, final WebClient webClient, final DiscoveryClient discoveryClient) {
         this.restTemplate = restTemplate;
         this.webClient = webClient;
+        this.discoveryClient = discoveryClient;
     }
 
     @RequestMapping("/{userId}")
