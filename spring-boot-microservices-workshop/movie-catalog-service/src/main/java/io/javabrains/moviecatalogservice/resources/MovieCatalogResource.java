@@ -1,9 +1,6 @@
 package io.javabrains.moviecatalogservice.resources;
 
-import io.javabrains.moviecatalogservice.models.CatalogItem;
-import io.javabrains.moviecatalogservice.models.Movie;
-import io.javabrains.moviecatalogservice.models.Rating;
-import io.javabrains.moviecatalogservice.models.UserRating;
+import io.javabrains.moviecatalogservice.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,6 +23,14 @@ public class MovieCatalogResource {
     private static final String GET_MOVIES_ENDPOINT = "http://localhost:8082/movies/";
     private static final String GET_RATINGS_ENDPOINT = "http://localhost:8083/ratingsdata/user/";
 
+    private static final Map<String, String> CATALOG_OWNER_MAP = Map.of(
+            "1", "Animesh Paul",
+            "2", "Swagat Bhattacharjee",
+            "3", "Boris Laishram",
+            "4", "Sandeep Gohain",
+            "5", "Praveen Chhetri"
+    );
+
     @Autowired
     public MovieCatalogResource(final RestTemplate restTemplate, final WebClient webClient) {
         this.restTemplate = restTemplate;
@@ -32,15 +38,18 @@ public class MovieCatalogResource {
     }
 
     @RequestMapping("/{userId}")
-    public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
+    public Catalogs getCatalog(@PathVariable("userId") String userId) {
         // get all rated movie IDs for this user
         final UserRating userRating = getUserRatings(userId);
         final List<Rating> userRatings = new ArrayList<>(userRating.getRatings());
 
         // For each movie ID, call movie info service and get details
-        return userRatings.stream()
+        final List<CatalogItem> catalogItems = userRatings.stream()
                 .map(this::getCatalogItem)
                 .collect(Collectors.toList());
+
+        final String catalogOwner = CATALOG_OWNER_MAP.getOrDefault(userId, "Unknown Owner");
+        return new Catalogs(catalogOwner, catalogItems);
     }
 
     private UserRating getUserRatings(final String userId) {

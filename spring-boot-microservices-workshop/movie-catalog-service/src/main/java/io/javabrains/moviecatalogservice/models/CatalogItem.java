@@ -5,6 +5,10 @@ public class CatalogItem {
     private String description;
     private int rating;
 
+    public CatalogItem() {
+        // for jackson deserialization
+    }
+
     public CatalogItem(final String name, final String description, final int rating) {
         this.name = name;
         this.description = description;
