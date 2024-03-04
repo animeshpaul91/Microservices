@@ -20,8 +20,12 @@ public class MovieCatalogResource {
 
     private final RestTemplate restTemplate;
     private final WebClient webClient;
-    private static final String GET_MOVIES_ENDPOINT = "http://localhost:8082/movies/";
-    private static final String GET_RATINGS_ENDPOINT = "http://localhost:8083/ratingsdata/user/";
+
+    // the movie-info-service performs as a key for service discovery
+    private static final String GET_MOVIES_ENDPOINT = "http://movie-info-service/movies/";
+
+    // the ratings-data-service performs as a key for service discovery
+    private static final String GET_RATINGS_ENDPOINT = "http://ratings-data-service/ratingsdata/user/";
 
     private static final Map<String, String> CATALOG_OWNER_MAP = Map.of(
             "1", "Animesh Paul",
