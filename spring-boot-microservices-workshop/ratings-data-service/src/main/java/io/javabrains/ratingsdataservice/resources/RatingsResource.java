@@ -20,7 +20,5 @@ public class RatingsResource {
         UserRating userRating = new UserRating();
         userRating.initData(userId);
         return userRating;
-
     }
-
 }
