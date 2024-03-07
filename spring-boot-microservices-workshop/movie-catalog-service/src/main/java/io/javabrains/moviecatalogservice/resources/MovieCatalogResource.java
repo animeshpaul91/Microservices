@@ -1,6 +1,10 @@
 package io.javabrains.moviecatalogservice.resources;
 
-import io.javabrains.moviecatalogservice.models.*;
+import io.javabrains.moviecatalogservice.models.CatalogItem;
+import io.javabrains.moviecatalogservice.models.Catalogs;
+import io.javabrains.moviecatalogservice.models.Movie;
+import io.javabrains.moviecatalogservice.models.Rating;
+import io.javabrains.moviecatalogservice.models.UserRating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +16,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static io.javabrains.moviecatalogservice.utils.MovieUtils.map;
 
 @RestController
 @RequestMapping("/catalog")
@@ -66,8 +71,7 @@ public class MovieCatalogResource {
 
     private CatalogItem getCatalogItem(final Rating rating) {
         final Movie retrievedMovie = restTemplate.getForObject(GET_MOVIES_ENDPOINT + rating.getMovieId(), Movie.class);
-        final String movieName = Optional.ofNullable(retrievedMovie).map(Movie::getName).orElse(null);
-        return new CatalogItem(movieName, "default description", rating.getRating());
+        return retrievedMovie != null ? map(retrievedMovie, rating) : new CatalogItem();
     }
 
     /* final Movie retrievedMovie = webClient

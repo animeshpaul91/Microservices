@@ -1,11 +1,18 @@
 package io.javabrains.moviecatalogservice.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collections;
 import java.util.List;
 
+import static io.javabrains.moviecatalogservice.utils.MovieUtils.CATALOGS;
+import static io.javabrains.moviecatalogservice.utils.MovieUtils.CATALOG_OWNER;
+
 public class Catalogs {
 
+    @JsonProperty(CATALOG_OWNER)
     private String catalogOwner;
+    @JsonProperty(CATALOGS)
     private List<CatalogItem> catalogs;
 
     public Catalogs() {
