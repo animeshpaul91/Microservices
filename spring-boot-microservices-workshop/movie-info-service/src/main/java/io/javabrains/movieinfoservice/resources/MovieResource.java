@@ -18,8 +18,11 @@ public class MovieResource {
     @Value("${api.key}")
     private String apiKey;
 
+    private final RestTemplate restTemplate;
     @Autowired
-    private RestTemplate restTemplate;
+    public MovieResource(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @RequestMapping("/{movieId}")
     public Movie getMovieInfo(@PathVariable("movieId") String movieId) {
