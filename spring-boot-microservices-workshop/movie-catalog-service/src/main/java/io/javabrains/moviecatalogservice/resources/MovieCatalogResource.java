@@ -1,10 +1,14 @@
 package io.javabrains.moviecatalogservice.resources;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.javabrains.moviecatalogservice.models.CatalogItem;
 import io.javabrains.moviecatalogservice.models.Catalogs;
 import io.javabrains.moviecatalogservice.models.Movie;
 import io.javabrains.moviecatalogservice.models.Rating;
 import io.javabrains.moviecatalogservice.models.UserRating;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +28,8 @@ import static io.javabrains.moviecatalogservice.utils.MovieUtils.map;
 @RestController
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
+
+    private static final Logger log = LoggerFactory.getLogger(MovieCatalogResource.class);
 
     private final RestTemplate restTemplate;
     private final WebClient webClient;
@@ -51,6 +58,7 @@ public class MovieCatalogResource {
     }
 
     @RequestMapping("/{userId}")
+    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public Catalogs getCatalog(@PathVariable("userId") String userId) {
         // get all rated movie IDs for this user
         final UserRating userRating = getUserRatings(userId);
@@ -65,14 +73,24 @@ public class MovieCatalogResource {
         return new Catalogs(catalogOwner, catalogItems);
     }
 
+    @HystrixCommand
     private UserRating getUserRatings(final String userId) {
         return restTemplate.getForObject(GET_RATINGS_ENDPOINT + userId, UserRating.class);
     }
 
+    @HystrixCommand
     private CatalogItem getCatalogItem(final Rating rating) {
         final Movie retrievedMovie = restTemplate.getForObject(GET_MOVIES_ENDPOINT + rating.getMovieId(), Movie.class);
         return retrievedMovie != null ? map(retrievedMovie, rating) : new CatalogItem();
     }
+
+    public Catalogs getFallbackCatalog(@PathVariable("userId") String userId) {
+        // return a dummy hardcoded response
+        log.debug("CircuitBreaker tripping in");
+        final String catalogOwner = "Animesh Paul";
+        return new Catalogs(catalogOwner, Collections.singletonList(new CatalogItem("No movie", StringUtils.EMPTY, 0)));
+    }
+
 
     /* final Movie retrievedMovie = webClient
                 .get()
