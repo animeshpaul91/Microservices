@@ -72,13 +72,11 @@ public class MovieCatalogResource {
         final String catalogOwner = CATALOG_OWNER_MAP.getOrDefault(userId, "Unknown Owner");
         return new Catalogs(catalogOwner, catalogItems);
     }
-
-    @HystrixCommand
+    
     private UserRating getUserRatings(final String userId) {
         return restTemplate.getForObject(GET_RATINGS_ENDPOINT + userId, UserRating.class);
     }
 
-    @HystrixCommand
     private CatalogItem getCatalogItem(final Rating rating) {
         final Movie retrievedMovie = restTemplate.getForObject(GET_MOVIES_ENDPOINT + rating.getMovieId(), Movie.class);
         return retrievedMovie != null ? map(retrievedMovie, rating) : new CatalogItem();
