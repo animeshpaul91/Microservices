@@ -1,6 +1,7 @@
 package io.javabrains.moviecatalogservice.services;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.javabrains.moviecatalogservice.models.CatalogItem;
 import io.javabrains.moviecatalogservice.models.Movie;
 import io.javabrains.moviecatalogservice.models.Rating;
@@ -23,7 +24,15 @@ public class MovieInfoService {
         this.restTemplate = restTemplate;
     }
 
-    @HystrixCommand(fallbackMethod = "getFallbackCatalogItem")
+    @HystrixCommand(fallbackMethod = "getFallbackCatalogItem", commandProperties = {
+            // request timeout set to 2 seconds
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
+            // number of requests that it needs to see. Last 5 requests
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
+            // if last (50% of 6) == 3 requests fail, kick in CB
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+            // how long CB is going to sleep before it picks up again
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000") })
     public CatalogItem getCatalogItem(final Rating rating) {
         final Movie retrievedMovie = restTemplate.getForObject(GET_MOVIES_ENDPOINT + rating.getMovieId(), Movie.class);
         return retrievedMovie != null ? map(retrievedMovie, rating) : new CatalogItem();
