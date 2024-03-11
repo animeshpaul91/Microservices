@@ -32,7 +32,7 @@ public class MovieInfoService {
             // if last (50% of 6) == 3 requests fail, kick in CB
             @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
             // how long CB is going to sleep before it picks up again
-            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000") })
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")})
     public CatalogItem getCatalogItem(final Rating rating) {
         final Movie retrievedMovie = restTemplate.getForObject(GET_MOVIES_ENDPOINT + rating.getMovieId(), Movie.class);
         return retrievedMovie != null ? map(retrievedMovie, rating) : new CatalogItem();
@@ -41,4 +41,18 @@ public class MovieInfoService {
     public CatalogItem getFallbackCatalogItem(final Rating rating) {
         return new CatalogItem("Movie name not found", StringUtils.EMPTY, rating.getRating());
     }
+
+    /*
+     * Bulkhead Hystrix Configuration
+     *
+     * @HystrixCommand(fallbackMethod = "getFallbackCatalogItem",
+            // create a new threadPool and use this key to reference the threadPool
+            threadPoolKey = "movieInfoPool", threadPoolProperties = {
+                    // max # of concurrent threads allowed for this bulkhead. 20 threads have invoked the movie-info API and will at most wait for response
+                    // from the movie-info-service.
+                    @HystrixProperty(name = "coreSize", value = "20"),
+                    // However, 21st thread through 30 onwards can be queued. They're just waiting and are not consuming resources.
+                    // Once a thread in the active threadpool has received a response, then these waiting threads will pick up the spot in the threadpool.
+                    @HystrixProperty(name = "maxQueueSize", value = "10") })
+     */
 }
