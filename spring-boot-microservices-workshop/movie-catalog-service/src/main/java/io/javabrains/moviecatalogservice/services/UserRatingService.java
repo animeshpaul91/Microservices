@@ -15,12 +15,15 @@ public class UserRatingService {
     // the ratings-data-service performs as a key for service discovery
     private static final String GET_RATINGS_ENDPOINT = "http://ratings-data-service/ratingsdata/user/";
     private final RestTemplate restTemplate;
+
     @Autowired
     public UserRatingService(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    @HystrixCommand(fallbackMethod = "getFallbackUserRatings")
+    @HystrixCommand(fallbackMethod = "getFallbackUserRatings", commandProperties = {
+
+    })
     public UserRating getUserRatings(final String userId) {
         return restTemplate.getForObject(GET_RATINGS_ENDPOINT + userId, UserRating.class);
     }

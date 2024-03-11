@@ -15,22 +15,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableCircuitBreaker
 public class MovieCatalogServiceApplication {
 
-	@Bean
-	@LoadBalanced
-	public RestTemplate getRestTemplate() {
-		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-		clientHttpRequestFactory.setConnectTimeout(3000);
-		return new RestTemplate(clientHttpRequestFactory);
-	}
+    @Bean
+    @LoadBalanced
+    public RestTemplate getRestTemplate() {
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(3000);
+        return new RestTemplate(clientHttpRequestFactory);
+    }
 
-	@Bean
-	public WebClient getWebClient()  {
-		return WebClient.builder().build();
-	}
+    @Bean
+    public WebClient getWebClient() {
+        return WebClient.builder().build();
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(MovieCatalogServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MovieCatalogServiceApplication.class, args);
+    }
 
 }
-

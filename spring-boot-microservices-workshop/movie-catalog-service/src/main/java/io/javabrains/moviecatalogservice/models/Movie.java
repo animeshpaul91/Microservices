@@ -81,7 +81,10 @@ public class Movie {
         // for Jackson
     }
 
-    public Movie(String movieId, String name, String description, Boolean adult, String backDropPath, Long budget, String homepage, String imdbId, String originalLanguage, String originalTitle, Double popularity, String posterPath, String releaseDate, Long revenue, Integer runtime, String status, String tagline, Boolean video, Double voteAverage, Integer voteCount) {
+    public Movie(String movieId, String name, String description, Boolean adult, String backDropPath, Long budget,
+            String homepage, String imdbId, String originalLanguage, String originalTitle, Double popularity,
+            String posterPath, String releaseDate, Long revenue, Integer runtime, String status, String tagline,
+            Boolean video, Double voteAverage, Integer voteCount) {
         this.movieId = movieId;
         this.name = name;
         this.description = description;

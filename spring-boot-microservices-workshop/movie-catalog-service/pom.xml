@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+		<maven.formatter.version>2.23.0</maven.formatter.version>
 	</properties>
 
 	<dependencies>
@@ -52,8 +53,14 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<version>${maven.formatter.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 
 	<build>
 		<plugins>
@@ -69,6 +76,16 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+			<plugin>
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<configuration>
+					<directories>
+						<directory>${project.build.sourceDirectory}</directory>
+						<directory>${project.build.directory}/generated-sources</directory>
+					</directories>
+				</configuration>
+			</plugin>
         </plugins>
 	</build>
 

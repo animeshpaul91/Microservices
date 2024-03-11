@@ -32,11 +32,10 @@ public class MovieUtils {
     public static final String CATALOG_OWNER = "catalog_owner";
     public static final String CATALOGS = "catalogs";
 
-    
     // Maps movie to CatalogItem
     public static CatalogItem map(final Movie movie, final Rating rating) {
         final CatalogItem catalogItem = new CatalogItem();
-        
+
         catalogItem.setRating(rating.getRating());
         catalogItem.setMovieId(movie.getMovieId());
         catalogItem.setName(movie.getName());

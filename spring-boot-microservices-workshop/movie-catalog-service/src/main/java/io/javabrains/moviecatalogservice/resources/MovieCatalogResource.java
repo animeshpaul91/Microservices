@@ -26,13 +26,8 @@ public class MovieCatalogResource {
 
     private final UserRatingService userRatingService;
 
-    private static final Map<String, String> CATALOG_OWNER_MAP = Map.of(
-            "1", "Animesh Paul",
-            "2", "Swagat Bhattacharjee",
-            "3", "Boris Laishram",
-            "4", "Sandeep Gohain",
-            "5", "Praveen Chhetri"
-    );
+    private static final Map<String, String> CATALOG_OWNER_MAP = Map.of("1", "Animesh Paul", "2",
+            "Swagat Bhattacharjee", "3", "Boris Laishram", "4", "Sandeep Gohain", "5", "Praveen Chhetri");
 
     @Autowired
     public MovieCatalogResource(final MovieInfoService movieInfoService, final UserRatingService userRatingService) {
@@ -42,9 +37,9 @@ public class MovieCatalogResource {
     }
 
     /*
-        Hystrix does not work when annotated with private helper methods because the proxy wrapper class does not have access to these methods.
-        In order to make it work, we have to make these methods available for Hystrix. So, we need to include it in another layer of abstraction which gets injected.
-        So spring injects the proxy class.
+     * Hystrix does not work when annotated with private helper methods because the proxy wrapper class does not have
+     * access to these methods. In order to make it work, we have to make these methods available for Hystrix. So, we
+     * need to include it in another layer of abstraction which gets injected. So spring injects the proxy class.
      */
 
     @RequestMapping("/{userId}")
@@ -53,18 +48,15 @@ public class MovieCatalogResource {
         final List<Rating> userRatings = new ArrayList<>(userRatingService.getUserRatings(userId).getRatings());
 
         // For each movie ID, call movie info service and get details
-        final List<CatalogItem> catalogItems = userRatings.stream()
-                .map(movieInfoService::getCatalogItem)
+        final List<CatalogItem> catalogItems = userRatings.stream().map(movieInfoService::getCatalogItem)
                 .collect(Collectors.toList());
 
         final String catalogOwner = CATALOG_OWNER_MAP.getOrDefault(userId, "Unknown Owner");
         return new Catalogs(catalogOwner, catalogItems);
     }
 
-    /* final Movie retrievedMovie = webClient
-                .get()
-                .uri(GET_MOVIES_ENDPOINT + rating.getMovieId())
-                .retrieve()
-                .bodyToMono(Movie.class) // Mono is like a promise/future
-                .block(); // blocking call until mono is fulfilled */
+    /*
+     * final Movie retrievedMovie = webClient .get() .uri(GET_MOVIES_ENDPOINT + rating.getMovieId()) .retrieve()
+     * .bodyToMono(Movie.class) // Mono is like a promise/future .block(); // blocking call until mono is fulfilled
+     */
 }
