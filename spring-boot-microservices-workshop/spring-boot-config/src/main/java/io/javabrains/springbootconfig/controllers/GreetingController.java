@@ -1,5 +1,7 @@
 package io.javabrains.springbootconfig.controllers;
 
+import io.javabrains.springbootconfig.beans.DbSettings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +24,20 @@ public class GreetingController {
     @Value("#{${dbValues}}") // #{} converts it into a spring expression language
     private Map<String, String> dbValues;
 
+    private final DbSettings dbSettings;
+
+    @Autowired
+    public GreetingController(final DbSettings dbSettings) {
+        this.dbSettings = dbSettings;
+    }
+
     @GetMapping("/greeting")
     public String greeting() {
         return greetingMessage + " " + staticMessage + " " + listValues + " " + dbValues;
+    }
+
+    @GetMapping("/coordinates")
+    public String getDbCoordinates() {
+        return dbSettings.getURI();
     }
 }
