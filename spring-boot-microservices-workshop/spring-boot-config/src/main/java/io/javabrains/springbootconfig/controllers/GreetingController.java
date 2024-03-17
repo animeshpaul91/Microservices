@@ -3,6 +3,7 @@ package io.javabrains.springbootconfig.controllers;
 import io.javabrains.springbootconfig.beans.DbSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,10 +26,12 @@ public class GreetingController {
     private Map<String, String> dbValues;
 
     private final DbSettings dbSettings;
+    private final Environment environment;
 
     @Autowired
-    public GreetingController(final DbSettings dbSettings) {
+    public GreetingController(final DbSettings dbSettings, final Environment environment) {
         this.dbSettings = dbSettings;
+        this.environment = environment;
     }
 
     @GetMapping("/greeting")
@@ -39,5 +42,11 @@ public class GreetingController {
     @GetMapping("/coordinates")
     public String getDbCoordinates() {
         return dbSettings.getURI();
+    }
+
+    @GetMapping("/environment")
+    public String getEnvironmentDetails() {
+        // you shouldn't be using it because it affects testability. Don't use environment in your business logic
+        return environment.getProperty("spring.profiles.active", "default"); // will return the active profile
     }
 }
