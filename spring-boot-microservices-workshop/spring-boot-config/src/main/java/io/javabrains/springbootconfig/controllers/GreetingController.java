@@ -21,7 +21,7 @@ public class GreetingController {
     @Value("${my.list.values}")
     private List<String> listValues;
 
-    @Value("#{${dbValues}}") // #{} converts it into a spring expression language
+    @Value("#{${db.connection}}") // #{} converts it into a spring expression language
     private Map<String, String> dbValues;
 
     private final DbSettings dbSettings;
