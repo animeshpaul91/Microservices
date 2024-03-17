@@ -1,27 +1,6 @@
 ---
-server:
-  port: 8081
-
-spring:
-  application:
-    name: spring-boot-config
-
-app:
-  name: ${spring.application.name}
-
 my:
   greeting: Hello, welcome to ${app.name} on Stage
-  list:
-    values: One,Two,Three
 
 db:
-  host: 127.0.0.1
   port: 3309
-  connection: "{connectionString: 'https://${db.host}:${db.port}', username:
-    'foo', password: 'bar'}"
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
