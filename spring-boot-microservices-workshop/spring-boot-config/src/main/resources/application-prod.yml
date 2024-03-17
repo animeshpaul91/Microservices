@@ -1,0 +1,6 @@
+---
+my:
+  greeting: Hello, welcome to ${app.name} on Prod
+
+db:
+  port: 3308
