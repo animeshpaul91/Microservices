@@ -1,0 +1,8 @@
+GET localhost:8081/actuator/health
+Content-Type: application/json
+Accept: application/json
+
+###
+POST localhost:8081/actuator/refresh
+Content-Type: application/json
+Accept: application/json
