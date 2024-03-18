@@ -1,0 +1,31 @@
+---
+server:
+  port: 8081
+
+spring:
+  application:
+    name: spring-boot-config
+#  profiles:
+#    active: prod
+
+# java -jar <name-of-the-jar> --spring.profiles.active=test
+
+app:
+  name: ${spring.application.name}
+
+my:
+  greeting: Hello, welcome to ${app.name} from config server
+  list:
+    values: One,Two,Three,Four
+
+db:
+  host: 127.0.0.1
+  port: 3306
+  connection: "{connectionString: 'https://${db.host}:${db.port}', username:
+    'foo', password: 'bar'}"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
