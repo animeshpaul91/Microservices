@@ -17,7 +17,7 @@ app:
   name: ${spring.application.name}
 
 my:
-  greeting: Hello, welcome to ${app.name}
+  greeting: Hello, welcome to ${app.name} on config server
   list:
     values: One,Two,Three
 
