@@ -20,6 +20,7 @@ public class HelloWorldConfiguration {
         return 32;
     }
 
+    // using existing beans to create new beans
     @Bean
     public Person getPerson() { // by direct method call
         return new Person(getName(), getAge(), getAddress());
