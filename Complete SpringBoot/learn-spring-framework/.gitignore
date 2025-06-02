@@ -33,3 +33,5 @@ build/
 .vscode/
 
 ### Maven Binaries
+mvnw
+mvnw.cmd
