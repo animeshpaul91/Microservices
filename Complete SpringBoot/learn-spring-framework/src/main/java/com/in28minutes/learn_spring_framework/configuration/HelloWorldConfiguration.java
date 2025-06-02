@@ -26,13 +26,18 @@ public class HelloWorldConfiguration {
     }
 
     @Bean
-    public Person getPersonWithParameters(String getName, int getAge, Address getAddress) { // getName(), getAge(), getAddress()
-        return new Person(getName, getAge, getAddress);
+    public Person getPersonWithParameters(String getName, int getAge, Address getAddress2) { // getName(), getAge(), getAddress()
+        return new Person(getName, getAge, getAddress2);
     }
 
     @Bean
-            //(name = "address")
+    //(name = "address")
     public Address getAddress() {
         return new Address("89 Spring Ville Ave", "Buffalo", "NY", 14226);
+    }
+
+    @Bean
+    public Address getAddress2() {
+        return new Address("7001 Old Redmond Road", "Redmond", "WA", 98052);
     }
 }
