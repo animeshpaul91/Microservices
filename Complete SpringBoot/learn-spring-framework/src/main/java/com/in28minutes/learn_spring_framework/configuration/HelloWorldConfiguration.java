@@ -21,11 +21,17 @@ public class HelloWorldConfiguration {
     }
 
     @Bean
-    public Person getPerson() {
-        return new Person(getName(), getAge());
+    public Person getPerson() { // by direct method call
+        return new Person(getName(), getAge(), getAddress());
     }
 
-    @Bean(name = "address")
+    @Bean
+    public Person getPersonWithParameters(String getName, int getAge, Address getAddress) { // getName(), getAge(), getAddress()
+        return new Person(getName, getAge, getAddress);
+    }
+
+    @Bean
+            //(name = "address")
     public Address getAddress() {
         return new Address("89 Spring Ville Ave", "Buffalo", "NY", 14226);
     }

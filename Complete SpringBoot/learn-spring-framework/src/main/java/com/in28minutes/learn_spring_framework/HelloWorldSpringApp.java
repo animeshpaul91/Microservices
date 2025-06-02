@@ -16,6 +16,7 @@ public class HelloWorldSpringApp {
         System.out.println(context.getBean("getName"));
         System.out.println(context.getBean("getAge"));
         System.out.println(context.getBean("getPerson"));
-        System.out.println(context.getBean("address"));
+        System.out.println(context.getBean("getAddress"));
+        System.out.println(context.getBean("getPersonWithParameters"));
     }
 }
