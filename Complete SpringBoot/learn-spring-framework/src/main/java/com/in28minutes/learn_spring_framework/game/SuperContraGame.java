@@ -1,6 +1,6 @@
 package com.in28minutes.learn_spring_framework.game;
 
-public class SuperContraGame implements Game {
+public class SuperContraGame implements GamingConsole {
     @Override
     public void up() {
         System.out.println("Super Contra up");

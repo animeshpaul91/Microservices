@@ -6,7 +6,7 @@ import com.in28minutes.learn_spring_framework.game.SuperContraGame;
 
 public class AppGamingBasic {
     public static void main(String[] args) {
-        final MarioGame game = new MarioGame();
+        final MarioGame marioGame = new MarioGame();
         final SuperContraGame superContraGame = new SuperContraGame();
         final GameRunner gameRunner = new GameRunner(superContraGame);
         gameRunner.run();

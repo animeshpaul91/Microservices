@@ -1,6 +1,6 @@
 package com.in28minutes.learn_spring_framework.game;
 
-public class MarioGame implements Game{
+public class MarioGame implements GamingConsole {
     @Override
     public void up() {
         System.out.println("Mario up");
