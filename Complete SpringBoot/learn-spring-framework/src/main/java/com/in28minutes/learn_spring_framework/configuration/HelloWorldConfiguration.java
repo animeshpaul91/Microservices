@@ -1,5 +1,7 @@
 package com.in28minutes.learn_spring_framework.configuration;
 
+import com.in28minutes.learn_spring_framework.dto.Address;
+import com.in28minutes.learn_spring_framework.dto.Person;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,5 +13,20 @@ public class HelloWorldConfiguration {
     @Bean
     public String getName() {
         return "Animesh";
+    }
+
+    @Bean
+    public int getAge() {
+        return 32;
+    }
+
+    @Bean
+    public Person getPerson() {
+        return new Person(getName(), getAge());
+    }
+
+    @Bean
+    public Address getAddress() {
+        return new Address("89 Spring Ville Ave", "Buffalo", "NY", 14226);
     }
 }

@@ -14,5 +14,8 @@ public class HelloWorldSpringApp {
 
         // 3. Configure stuff that we want spring to manage @Configuration
         System.out.println(context.getBean("getName"));
+        System.out.println(context.getBean("getAge"));
+        System.out.println(context.getBean("getPerson"));
+        System.out.println(context.getBean("getAddress"));
     }
 }
