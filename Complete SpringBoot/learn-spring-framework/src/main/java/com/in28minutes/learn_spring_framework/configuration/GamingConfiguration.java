@@ -15,9 +15,8 @@ public class GamingConfiguration {
         return new PacmanGame();
     }
 
-//    final GamingConsole marioGame = new MarioGame();
-//    final GamingConsole superContraGame = new SuperContraGame();
-//    final GamingConsole pacmanGame =
-//    final GameRunner gameRunner = new GameRunner(pacmanGame);
-//        gameRunner.run();
+    @Bean
+    public GameRunner gameRunner(GamingConsole game) {
+        return new GameRunner(game);
+    }
 }
