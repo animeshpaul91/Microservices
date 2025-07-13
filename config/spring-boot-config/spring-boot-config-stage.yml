@@ -1,6 +1,0 @@
----
-my:
-  greeting: Hello, welcome to ${app.name} on Stage
-
-db:
-  port: 3307

@@ -12,6 +12,7 @@ public class GamingConfiguration {
 
     @Bean
     public GameRunner gameRunner(GamingConsole game) {
+        System.out.println("Parameter " + game.getClass().getSimpleName());
         return new GameRunner(game);
     }
 }
