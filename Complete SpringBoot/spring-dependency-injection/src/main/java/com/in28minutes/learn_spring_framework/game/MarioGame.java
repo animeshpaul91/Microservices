@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Primary
-@Qualifier("MarioGame")
+@Qualifier("MarioGame") // @Qualifier has higher precedence than @Primary
 public class MarioGame implements GamingConsole {
     @Override
     public void up() {
