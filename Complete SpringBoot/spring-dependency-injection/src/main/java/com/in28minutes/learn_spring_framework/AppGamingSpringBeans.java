@@ -9,8 +9,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class AppGamingSpringBeans {
     public static void main(String[] args) {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(GamingConfiguration.class);
-        final GamingConsole gamingConsole = context.getBean(GamingConsole.class);
-        gamingConsole.up();
         final Runner runner = context.getBean(GameRunner.class);
         runner.run();
         context.close();

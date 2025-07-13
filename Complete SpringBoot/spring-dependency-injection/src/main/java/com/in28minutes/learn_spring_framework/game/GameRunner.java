@@ -1,6 +1,7 @@
 package com.in28minutes.learn_spring_framework.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,7 +9,7 @@ public class GameRunner implements Runner {
     private final GamingConsole game;
 
     @Autowired
-    public GameRunner(final GamingConsole game) {
+    public GameRunner(@Qualifier("MarioGame") final GamingConsole game) {
         this.game = game;
     }
 
