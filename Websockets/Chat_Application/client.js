@@ -1,26 +1,27 @@
-var sock = new WebSocket('ws://localhost:5001');
+const { io } = require('socket.io-client');
+const socket = io('http://localhost:3000'); // Connect to the server
 
-sock.onopen = function () {
-    console.log('Connected to server');
+socket.on('connect', () => {
+    console.log(`You are now connected to server with ID ${socket.id}`);
     console.log('Sending message to server every second for 10 seconds');
 
-    const intervalId = setInterval(function () {
-        sock.send('Hello from client!');
+    const intervalId = setInterval(() => {
+        socket.emit('send-message', 'Hello from client!'); // Emit a custom event with a message
     }, 1000); // send every 1 second
 
-    setTimeout(function () {
-        clearInterval(intervalId); // stop after 5 seconds
+    setTimeout(() => {
+        clearInterval(intervalId); // stop after 10 seconds
     }, 10000);
-};
 
-sock.onmessage = function (event) {
-    console.log('Received from server: ' + event.data);
-};
+    socket.on('message', (data) => { // Listen for messages from the server
+        console.log('Received from server: ' + data);
+    });
+});
 
-sock.onclose = function () {
+socket.on('disconnect', () => {
     console.log('Disconnected from server');
-};
+});
 
-sock.onerror = function (error) {
-    console.error('WebSocket error: ' + error);
-};
+socket.on('error', (error) => {
+    console.error('Socket.IO error: ' + error);
+});

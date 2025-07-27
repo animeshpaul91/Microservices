@@ -1,20 +1,19 @@
-var WebSocketServer = require('ws').WebSocketServer;
-var wss = new WebSocketServer({ port: 5001 });
+const io = require('socket.io')(3000, {
+    cors: {
+        origin: 'http://localhost:8080', // Allow requests from this origin
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['my-custom-header'],
+        credentials: true
+    }
+}); // Initialize Socket.IO on port 3000
 
-wss.on('connection', function (mySocket) {
-    console.log('Client connected');
-
-    mySocket.on('message', function (message) {
-        console.log('Received: ' + message);
-        console.log('Broadcasting message to all connected clients');
-        wss.clients.forEach(function (client) {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message);
-            }
-        });
-    });
-
-    mySocket.on('close', function () {
-        console.log('Client disconnected');
+io.on('connection', (socket) => {
+    console.log('A client with ID ' + socket.id + ' is connected');
+    socket.on('send-message', (msg) => {
+        console.log('Received message: ' + msg);
+        // Echo the message back to the client
+        socket.send('Server received: ' + msg);
     });
 });
+
+
