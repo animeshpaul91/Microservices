@@ -37,5 +37,5 @@ build/
 
 
 ### Websockets Project
-Websockets/server/node_modules
+node_modules/
 
