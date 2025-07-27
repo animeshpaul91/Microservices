@@ -12,6 +12,7 @@ io.on('connection', (socket) => {
     socket.on('send-message', (msg) => {
         console.log('Received message: ' + msg);
         // Echo the message back to the client
-        io.emit('receive-message', `${msg}`);
+        io.emit('receive-message', `${msg}`); // Broadcast the message to all connected clients
+        socket.broadcast.emit('receive-message', `${msg}`); // Send the message to all clients except the sender
     });
 });
