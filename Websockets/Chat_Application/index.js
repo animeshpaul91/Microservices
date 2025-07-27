@@ -6,8 +6,12 @@ wss.on('connection', function (mySocket) {
 
     mySocket.on('message', function (message) {
         console.log('Received: ' + message);
-        console.log('Sending response to client');
-        mySocket.send('Hello from server!');
+        console.log('Broadcasting message to all connected clients');
+        wss.clients.forEach(function (client) {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
     });
 
     mySocket.on('close', function () {
