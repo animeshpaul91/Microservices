@@ -13,7 +13,7 @@ socket.on('connect', () => {
         clearInterval(intervalId); // stop after 10 seconds
     }, 10000);
 
-    socket.on('message', (data) => { // Listen for messages from the server
+    socket.on('receive-message', (data) => { // Listen for messages from the server
         console.log('Received from server: ' + data);
     });
 });

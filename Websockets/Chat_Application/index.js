@@ -12,8 +12,6 @@ io.on('connection', (socket) => {
     socket.on('send-message', (msg) => {
         console.log('Received message: ' + msg);
         // Echo the message back to the client
-        socket.send('Server received: ' + msg);
+        io.emit('receive-message', `${msg}`);
     });
 });
-
-
