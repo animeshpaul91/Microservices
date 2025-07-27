@@ -106,14 +106,20 @@
             Disconnected
         </div>
 
-        <div>
+        <div style="margin-bottom: 10px;">
             <button id="connectBtn" onclick="connect()">Connect</button>
+            <button id="reconnectBtn" onclick="reconnect()" style="display:none;">Reconnect</button>
             <button id="disconnectBtn" onclick="disconnect()" disabled>Disconnect</button>
         </div>
 
-        <div>
+        <div style="margin-bottom: 10px;">
             <input type="text" id="messageInput" class="message-input" placeholder="Enter message..." disabled>
             <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <span id="sentCount">Sent: 0</span> |
+            <span id="receivedCount">Received: 0</span>
         </div>
 
         <div id="messages" class="messages"></div>
@@ -123,12 +129,17 @@
 
     <script>
         let ws = null;
+        let sentCount = 0;
+        let receivedCount = 0;
         const statusDiv = document.getElementById('status');
         const connectBtn = document.getElementById('connectBtn');
+        const reconnectBtn = document.getElementById('reconnectBtn');
         const disconnectBtn = document.getElementById('disconnectBtn');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const messagesDiv = document.getElementById('messages');
+        const sentCountSpan = document.getElementById('sentCount');
+        const receivedCountSpan = document.getElementById('receivedCount');
 
         function connect() {
             try {
@@ -137,25 +148,35 @@
                 ws.onopen = function () {
                     addMessage('Connected to WebSocket server', 'system');
                     updateStatus(true);
+                    messageInput.focus();
+                    reconnectBtn.style.display = 'none';
                 };
 
                 ws.onmessage = function (event) {
-                    addMessage('Server: ' + event.data, 'received');
+                    addMessage('Server: ' + event.data, 'received', true);
+                    receivedCount++;
+                    receivedCountSpan.textContent = 'Received: ' + receivedCount;
                 };
 
                 ws.onclose = function () {
                     addMessage('Disconnected from WebSocket server', 'system');
                     updateStatus(false);
+                    reconnectBtn.style.display = '';
                 };
 
                 ws.onerror = function (error) {
                     addMessage('WebSocket error: ' + error, 'system');
                     updateStatus(false);
+                    reconnectBtn.style.display = '';
                 };
 
             } catch (error) {
                 addMessage('Connection failed: ' + error.message, 'system');
             }
+        }
+
+        function reconnect() {
+            connect();
         }
 
         function disconnect() {
@@ -169,14 +190,21 @@
             if (message && ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(message);
                 addMessage('You: ' + message, 'sent');
+                sentCount++;
+                sentCountSpan.textContent = 'Sent: ' + sentCount;
                 messageInput.value = '';
+                messageInput.focus();
             }
         }
 
-        function addMessage(message, type) {
+        function addMessage(message, type, highlight) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message ' + type;
-            messageDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            messageDiv.innerHTML = `<span style="color:#888;font-size:0.9em;">[${new Date().toLocaleTimeString()}]</span> <span>${message}</span>`;
+            if (highlight) {
+                messageDiv.style.backgroundColor = '#ffe082';
+                setTimeout(() => { messageDiv.style.backgroundColor = ''; }, 800);
+            }
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -189,6 +217,7 @@
                 disconnectBtn.disabled = false;
                 messageInput.disabled = false;
                 sendBtn.disabled = false;
+                reconnectBtn.style.display = 'none';
             } else {
                 statusDiv.textContent = 'Disconnected';
                 statusDiv.className = 'status disconnected';
@@ -196,11 +225,16 @@
                 disconnectBtn.disabled = true;
                 messageInput.disabled = true;
                 sendBtn.disabled = true;
+                reconnectBtn.style.display = '';
             }
         }
 
         function clearMessages() {
             messagesDiv.innerHTML = '';
+            sentCount = 0;
+            receivedCount = 0;
+            sentCountSpan.textContent = 'Sent: 0';
+            receivedCountSpan.textContent = 'Received: 0';
         }
 
         // Allow sending messages with Enter key

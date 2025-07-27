@@ -6,6 +6,7 @@ wss.on('connection', function (mySocket) {
 
     mySocket.on('message', function (message) {
         console.log('Received: ' + message);
+        console.log('Sending response to client');
         mySocket.send('Hello from server!');
     });
 
