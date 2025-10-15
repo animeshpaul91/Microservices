@@ -1,7 +1,7 @@
 package com.animesh.grpc.sec01;
 
 
-import com.animesh.grpc.models.PersonOuterClass;
+import com.animesh.grpc.sec01.models.PersonOuterClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
