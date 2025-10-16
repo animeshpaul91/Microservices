@@ -13,6 +13,8 @@ public class SerializationDemo {
     private static final Path PATH = Path.of("person.out");
 
     public static void main(String[] args) throws IOException {
+
+        // primitive values that are not assigned takes default values. It treats those fields to be non-existent.
         final Person person = Person.newBuilder()
                 .setLastName("Paul")
                 .setAge(32)
