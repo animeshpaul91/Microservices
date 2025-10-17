@@ -14,3 +14,4 @@ message Dealer {
   string name = 1;
   map<string, Car> inventory = 2;
 }
+

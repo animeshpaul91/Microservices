@@ -1,0 +1,24 @@
+syntax = "proto3";
+package sec03;
+
+option java_multiple_files = true;
+option java_package = "com.animesh.grpc.sec03.models";
+
+enum ChannelType {
+  VOICE = 0;
+  SMS = 1;
+  RCS = 2;
+  WHATSAPP = 3;
+  MMS = 4;
+  EMAIL = 5;
+}
+
+message AddressSet {
+  repeated string endpoints = 1;
+  repeated string sources = 2;
+  repeated string destinations = 3;
+}
+
+message CaptureRules {
+  map<string, AddressSet> rules = 1;
+}
