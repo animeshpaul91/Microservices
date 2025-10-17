@@ -4,14 +4,22 @@ package sec03;
 option java_multiple_files = true;
 option java_package = "com.animesh.grpc.sec03.models";
 
+enum BodyStyle {
+  SEDAN = 0;
+  SUV = 1;
+  TRUCK = 2;
+  COUPE = 3;
+  CONVERTIBLE = 4;
+}
+
 message Car {
   string make = 1;
   string model = 2;
   int32 year = 3;
+  BodyStyle body_style = 4;
 }
 
 message Dealer {
   string name = 1;
   map<string, Car> inventory = 2;
 }
-
