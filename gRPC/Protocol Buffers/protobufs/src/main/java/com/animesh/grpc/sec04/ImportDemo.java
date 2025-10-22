@@ -1,8 +1,5 @@
 package com.animesh.grpc.sec04;
 
-import com.animesh.grpc.sec03.models.Credentials;
-import com.animesh.grpc.sec03.models.Email;
-import com.animesh.grpc.sec03.models.Phone;
 import com.animesh.grpc.sec04.models.Person;
 import com.animesh.grpc.sec04.models.common.Address;
 import com.animesh.grpc.sec04.models.common.BodyStyle;
