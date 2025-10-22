@@ -1,0 +1,15 @@
+syntax = "proto3";
+package sec04;
+
+import "sec-04/common/car.proto";
+import "sec-04/common/address.proto";
+
+option java_multiple_files = true;
+option java_package = "com.animesh.grpc.sec04.models";
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+  sec04.common.Address address = 3;
+  sec04.common.Car car = 4;
+}
