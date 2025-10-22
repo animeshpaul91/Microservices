@@ -5,11 +5,12 @@ option java_multiple_files = true;
 option java_package = "com.animesh.grpc.sec03.models";
 
 enum BodyStyle {
-  SEDAN = 0;
-  SUV = 1;
-  TRUCK = 2;
-  COUPE = 3;
-  CONVERTIBLE = 4;
+  UNKNOWN = 0; // Default value
+  SEDAN = 1;
+  SUV = 2;
+  TRUCK = 3;
+  COUPE = 4;
+  CONVERTIBLE = 5;
 }
 
 message Car {
