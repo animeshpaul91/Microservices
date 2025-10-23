@@ -7,6 +7,14 @@ import "sec-04/common/address.proto";
 option java_multiple_files = true;
 option java_package = "com.animesh.grpc.sec04.models";
 
+/*
+  The numbers in Protocol Buffers (e.g., 1, 2, 3, 4 in your Person message) are called field tags.
+  They uniquely identify each field in the binary encoding.
+  These tags are used during serialization and deserialization to map data to the correct fields, ensuring backward and forward compatibility.
+  Changing a tag number can break compatibility, so they should remain stable once assigned. The objective is to optimize the size of the encoded data while maintaining clarity and structure.
+  For instance if you use numbers between 1 to 15, they take one byte to encode, while numbers between 16 to 2047 take two bytes.
+*/
+
 message Person {
   string name = 1;
   optional int32 age = 2;
