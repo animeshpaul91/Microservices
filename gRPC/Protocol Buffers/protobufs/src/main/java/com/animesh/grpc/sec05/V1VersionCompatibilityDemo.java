@@ -6,7 +6,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class V1VersionCompatibilityDemo {
+public final class V1VersionCompatibilityDemo {
     private static final Logger log = LoggerFactory.getLogger(V1VersionCompatibilityDemo.class);
 
     public static void main(String[] args) throws InvalidProtocolBufferException {
