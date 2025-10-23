@@ -33,5 +33,6 @@ public class ImportDemo {
                 .build();
 
         log.info("Person Details: {}", person);
+        log.info("Person hasAge field: {}", person.hasAge());
     }
 }
