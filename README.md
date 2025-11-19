@@ -1,229 +1,138 @@
-# Microservices Learning Project
+# Microservices & Distributed Systems Lab
 
-A comprehensive collection of microservices implementations and Apache Kafka examples for learning distributed systems architecture.
+A single workstation of Spring, Kafka, gRPC, and WebSocket experiments built while following various Udemy courses. Each folder is a self-contained lab that you can open in your IDE of choice and run independently.
 
-## 📋 Project Overview
+## Repository Layout
 
-This repository contains multiple learning modules covering:
-- **Spring Boot Microservices** - Complete microservices architecture with service discovery
-- **Apache Kafka** - Event streaming platform examples and implementations
-- **Spring Framework Fundamentals** - Core Spring concepts and dependency injection
+| Path | What it contains |
+| --- | --- |
+| `spring-boot-microservices-workshop/` | Movie catalog microservices demo with Eureka, Config Server, and three business services. |
+| `Apache_Kafka/` | Kafka notes (`README.md`, `Schema_Registry.png`) and the `kafka-beginners-course` Maven multi-module project (basics, Twitter producer, Elasticsearch consumer, Kafka Streams). |
+| `Complete SpringBoot/` | Two Spring Boot 3.5 projects (`learn-spring-framework`, `spring-dependency-injection`) plus archived course starter code. |
+| `gRPC/Protocol Buffers/protobufs/` | Maven project that organizes `.proto` examples (sections 1‑5) and generates Java + gRPC stubs. |
+| `Websockets/` | Two Node.js demos: a raw `ws` example and a Socket.IO chat app. |
+| `master-spring-and-spring-boot-main.zip` | Archived upstream course code for reference. |
 
-## 🏗️ Architecture
+## Prerequisites
 
-### Spring Boot Microservices Workshop
+- Java 21 and Maven 3.9+
+- Node.js 18+ with npm (for the WebSocket demos)
+- Docker or local installs for Kafka/ZooKeeper and Elasticsearch if you want to run the streaming labs
+- A TMDb API key for real movie data in `movie-info-service`
+- Optional: Twitter API credentials for the Kafka Twitter producer
 
-A movie catalog system demonstrating microservices patterns:
+## Spring Boot Microservices Workshop (`spring-boot-microservices-workshop/`)
 
+This folder mirrors the Java Brains movie catalog tutorial and is currently the most complete end-to-end example.
+
+### Services & Ports
+
+| Service | Path | Port | Notes |
+| --- | --- | --- | --- |
+| Eureka Discovery Server | `eureka-discovery-server` | `8761` | Register all other services; visit `http://localhost:8761`. |
+| Spring Cloud Config Server | `spring-cloud-config-server` | `8888` | Points at this Git repo (`spring.cloud.config.server.git.search-paths=config/spring-boot-config`). Export `GIT_USERNAME` / `GIT_PASSWORD` before running. |
+| Ratings Data Service | `ratings-data-service` | `8083` | Returns mock ratings lists (`/ratingsdata/movies/{movieId}`, `/ratingsdata/user/{userId}`). |
+| Movie Info Service | `movie-info-service` | `8082` | Wraps TMDb lookups; requires `TMDB_API_KEY`. |
+| Movie Catalog Service | `movie-catalog-service` | `8081` | Aggregates ratings + movie metadata for `/catalog/{userId}` and exposes Hystrix stream (`/actuator/hystrix.stream`). |
+| Spring Boot Config Client | `spring-boot-config` | — | Sample app showing profile-specific YAML fetched through the Config Server. |
+
+### Boot Order
+
+```bash
+# 1. Service registry
+cd spring-boot-microservices-workshop/eureka-discovery-server
+mvn spring-boot:run
+
+# 2. Config server
+cd ../spring-cloud-config-server
+mvn spring-boot:run
+
+# 3. Business services (in separate terminals)
+cd ../ratings-data-service    && mvn spring-boot:run
+cd ../movie-info-service      && mvn spring-boot:run
+cd ../movie-catalog-service   && mvn spring-boot:run
 ```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  Movie Catalog  │────│   Movie Info     │    │  Ratings Data   │
-│    Service      │    │    Service       │    │    Service      │
-│   (Port: 8081)  │    │  (Port: 8082)    │    │  (Port: 8083)   │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌──────────────────┐
-                    │ Eureka Discovery │
-                    │     Server       │
-                    │   (Port: 8761)   │
-                    └──────────────────┘
-                                 │
-                    ┌──────────────────┐
-                    │ Spring Cloud     │
-                    │ Config Server    │
-                    │   (Port: 8888)   │
-                    └──────────────────┘
-```
 
-### Services
+Verify the flow:
 
-#### 🎬 Movie Catalog Service
-- **Purpose**: Aggregates movie information and user ratings
-- **Endpoints**: `/catalog/{userId}` - Returns personalized movie catalog
-- **Dependencies**: Movie Info Service, Ratings Data Service
-- **Features**: Service composition, circuit breaker patterns
-
-#### 🎭 Movie Info Service  
-- **Purpose**: Provides detailed movie information
-- **Endpoints**: `/movies/{movieId}` - Returns movie details
-- **External API**: Integrates with The Movie Database (TMDb) API
-- **Features**: External API integration, data transformation
-
-#### ⭐ Ratings Data Service
-- **Purpose**: Manages user movie ratings
-- **Endpoints**: 
-  - `/ratingsdata/movies/{movieId}` - Get movie rating
-  - `/ratingsdata/user/{userId}` - Get user's ratings
-- **Features**: Mock data service for ratings
-
-#### 🔍 Eureka Discovery Server
-- **Purpose**: Service registry and discovery
-- **Port**: 8761
-- **Features**: Service registration, health monitoring, load balancing
-
-#### ⚙️ Spring Cloud Config Server
-- **Purpose**: Centralized configuration management
-- **Port**: 8888
-- **Features**: External configuration, environment-specific configs
-
-## 🚀 Apache Kafka Examples
-
-### Kafka Basics
-- **Producer Examples**: Simple producer, producer with callbacks, keyed messages
-- **Consumer Examples**: Basic consumer, consumer groups, manual offset management
-- **Location**: `Apache_Kafka/kafka-beginners-course/kafka-basics/`
-
-### Real-World Applications
-- **Twitter Producer**: Streams Twitter data to Kafka topics
-- **Elasticsearch Consumer**: Consumes Kafka messages and indexes to Elasticsearch
-- **Stream Processing**: Kafka Streams for real-time tweet filtering
-
-## 🛠️ Technology Stack
-
-### Microservices
-- **Spring Boot 2.x** - Application framework
-- **Spring Cloud** - Microservices toolkit
-- **Netflix Eureka** - Service discovery
-- **Spring Cloud Config** - Configuration management
-- **Maven** - Build tool
-
-### Apache Kafka
-- **Apache Kafka** - Event streaming platform
-- **Kafka Streams** - Stream processing library
-- **Elasticsearch** - Search and analytics engine
-- **Twitter API** - Real-time data source
-
-### Spring Framework
-- **Spring Core** - Dependency injection
-- **Spring Context** - Application context management
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Java 11 or higher
-- Maven 3.6+
-- Apache Kafka (for Kafka examples)
-- Elasticsearch (for consumer examples)
-
-### Running the Microservices
-
-1. **Start Eureka Discovery Server**
-   ```bash
-   cd spring-boot-microservices-workshop/eureka-discovery-server
-   mvn spring-boot:run
-   ```
-   Access at: http://localhost:8761
-
-2. **Start Config Server**
-   ```bash
-   cd spring-boot-microservices-workshop/spring-cloud-config-server
-   mvn spring-boot:run
-   ```
-
-3. **Start Individual Services**
-   ```bash
-   # Ratings Data Service (Port 8083)
-   cd spring-boot-microservices-workshop/ratings-data-service
-   mvn spring-boot:run
-   
-   # Movie Info Service (Port 8082)
-   cd spring-boot-microservices-workshop/movie-info-service
-   mvn spring-boot:run
-   
-   # Movie Catalog Service (Port 8081)
-   cd spring-boot-microservices-workshop/movie-catalog-service
-   mvn spring-boot:run
-   ```
-
-### Testing the Application
-
-Get movie catalog for user:
 ```bash
 curl http://localhost:8081/catalog/1
 ```
 
-### Running Kafka Examples
+### Centralized Configuration
 
-1. **Start Kafka**
-   ```bash
-   # Start Zookeeper
-   bin/zookeeper-server-start.sh config/zookeeper.properties
-   
-   # Start Kafka Server
-   bin/kafka-server-start.sh config/server.properties
-   ```
+`spring-boot-config/src/main/resources` contains `application-{env}.yml` files that the Config Server serves. Update those files to change values without redeploying the services. Because the Config Server is backed by this Git repo, remember to push commits if you want remote services (or colleagues) to pick up the changes.
 
-2. **Run Examples**
-   ```bash
-   cd Apache_Kafka/kafka-beginners-course/kafka-basics
-   mvn compile exec:java -Dexec.mainClass="gettingstarted.producers.ProducerDemo"
-   ```
+## Apache Kafka Track (`Apache_Kafka/`)
 
-## 📚 Learning Objectives
+- `README.md` is a living cheat-sheet that covers brokers, partitions, replication, CLI commands, idempotent producers, offset resets, and schema registry basics (with `Schema_Registry.png`).
+- `kafka-beginners-course` is a Maven multi-module project:
+  - `kafka-basics`: producer and consumer demos (simple, with callbacks, keys, and custom configs).
+  - `kafka-consumer-elasticsearch`: ingests Kafka messages into Elasticsearch indices.
+  - `kafka-producer-twitter`: streams tweets into Kafka topics (plug in your credentials).
+  - `kafka-streams-filter-tweets`: Kafka Streams application that filters tweets into a derived topic.
 
-### Microservices Patterns
-- Service decomposition
-- API Gateway pattern
-- Service discovery
-- Configuration management
-- Circuit breaker pattern
-- Service composition
+### Running an example
 
-### Event-Driven Architecture
-- Event streaming
-- Producer/Consumer patterns
-- Stream processing
-- Event sourcing concepts
+```bash
+# Start ZooKeeper and Kafka locally (or via Docker) first.
 
-### Spring Ecosystem
-- Dependency injection
-- Bean lifecycle management
-- Configuration management
-- Auto-configuration
+cd Apache_Kafka/kafka-beginners-course/kafka-basics
+mvn compile exec:java -Dexec.mainClass="gettingstarted.producers.ProducerDemo"
+```
 
-## 🔧 Configuration
+Use the CLI commands in `Apache_Kafka/README.md` to inspect topics, consumer groups, or to reset offsets while experimenting.
 
-### Application Ports
-- **Eureka Server**: 8761
-- **Config Server**: 8888
-- **Movie Catalog Service**: 8081
-- **Movie Info Service**: 8082
-- **Ratings Data Service**: 8083
+## Spring Boot Fundamentals (`Complete SpringBoot/`)
 
-### External Dependencies
-- **TMDb API**: Requires API key for movie information
-- **Kafka**: Required for streaming examples
-- **Elasticsearch**: Required for consumer examples
+Two starter projects that pair with the “Spring Boot Complete” course:
 
-## 📖 Key Concepts Demonstrated
+- `learn-spring-framework`: minimal Spring Boot 3.5 project that demonstrates component scanning, `ApplicationContext` usage, and record-based beans.
+- `spring-dependency-injection`: variations of constructor, setter, and field injection plus primary/qualifier examples.
 
-### Microservices
-- **Service Discovery**: Automatic service registration and lookup
-- **Load Balancing**: Client-side load balancing with Ribbon
-- **Fault Tolerance**: Circuit breaker patterns with Hystrix
-- **Configuration**: Externalized configuration management
+Each project bundles the Maven wrapper, so you can run:
 
-### Event Streaming
-- **Pub/Sub Messaging**: Producer/consumer decoupling
-- **Stream Processing**: Real-time data transformation
-- **Scalability**: Partitioned topics for horizontal scaling
+```bash
+cd "Complete SpringBoot/learn-spring-framework"
+./mvnw spring-boot:run
+```
 
-## 🤝 Contributing
+## gRPC & Protocol Buffers (`gRPC/Protocol Buffers/protobufs/`)
 
-This is a learning project. Feel free to experiment with:
-- Adding new microservices
-- Implementing additional Kafka patterns
-- Exploring different Spring features
-- Adding monitoring and observability
+A Maven project that organizes `.proto` examples across five sections (`sec-01` … `sec-05`). The `protobuf-maven-plugin` (protoc `3.25.5`, gRPC `1.72.0`) generates Java sources under `target/generated-sources`.
 
-## 📄 License
+Typical workflow:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+cd "gRPC/Protocol Buffers/protobufs"
+mvn clean compile   # generates Java + gRPC stubs
+mvn test            # runs the accompanying JUnit 5 specs
+```
 
-## 🙏 Acknowledgments
+Inspect the `src/main/proto` tree to see examples of maps, enums, one-ofs, well-known types, and message composition.
 
-- Based on Java Brains microservices tutorial
-- Apache Kafka documentation and examples
-- Spring Boot and Spring Cloud communities
+## WebSocket Demos (`Websockets/`)
+
+Two Node.js labs that showcase real-time communication patterns:
+
+- `Simple_Websockets`: barebones WebSocket server built with the `ws` library plus a `client.html` tester.
+- `Chat_Application`: Socket.IO-based multi-user chat with both server (`index.js`) and in-browser client (`client.js`).
+
+Install dependencies and start either example:
+
+```bash
+cd Websockets/Simple_Websockets
+npm install
+npx nodemon index.js
+```
+
+Then open the corresponding client (`client.html` or `client.js` via a bundler) to exchange messages.
+
+## Contributing & Next Steps
+
+- Extend the Spring microservices with API gateway, tracing, or persistence.
+- Add new Kafka processors (e.g., KSQL or Kafka Connect sinks).
+- Experiment with unary vs. streaming RPCs by adding `.proto` files in the gRPC project.
+- Improve the WebSocket demos with authentication or persistence.
+
+Feel free to open the lab you are interested in, run the commands above, and iterate. Each folder intentionally keeps dependencies isolated so you can focus on one technology at a time.
