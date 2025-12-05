@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class ImportDemo {
     private static final Logger log = LoggerFactory.getLogger(ImportDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Address address = Address.newBuilder()
                 .setStreet("123 Main St")
                 .setCity("Springfield")
