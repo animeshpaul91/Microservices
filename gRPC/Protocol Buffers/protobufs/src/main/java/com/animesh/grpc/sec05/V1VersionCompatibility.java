@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public final class V1VersionCompatibility {
     private static final Logger log = LoggerFactory.getLogger(V1VersionCompatibility.class);
 
-    public static void main(String[] args) throws InvalidProtocolBufferException {
+    static void main(String[] args) throws InvalidProtocolBufferException {
         final Television tv = Television.newBuilder()
                 .setBrand("Samsung")
                 .setYear(2019)

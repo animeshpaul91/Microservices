@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class OneOfDemo {
     private static final Logger log = LoggerFactory.getLogger(OneOfDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Email email = Email.newBuilder()
                 .setAddress("ani.nitmz@gmail.com")
                 .setPassword("password")

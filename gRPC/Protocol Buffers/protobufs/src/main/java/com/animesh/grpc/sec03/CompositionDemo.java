@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class CompositionDemo {
     private static final Logger log = LoggerFactory.getLogger(CompositionDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Address address = Address.newBuilder()
                 .setStreet("101 Main St")
                 .setCity("Redmond")

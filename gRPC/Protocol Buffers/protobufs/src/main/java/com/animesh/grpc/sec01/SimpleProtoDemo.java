@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class SimpleProtoDemo {
     private static final Logger log = LoggerFactory.getLogger(SimpleProtoDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Person person = Person.newBuilder()
                 .setName("John")
                 .setAge(12)

@@ -11,7 +11,7 @@ import java.util.Map;
 public class MapDemo {
     private static final Logger log = LoggerFactory.getLogger(MapDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Car car1 = Car.newBuilder()
                 .setMake("Toyota")
                 .setModel("Camry")

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public final class V2VersionCompatibility {
     private static final Logger log = LoggerFactory.getLogger(V2VersionCompatibility.class);
 
-    public static void main(String[] args) throws InvalidProtocolBufferException {
+    static void main(String[] args) throws InvalidProtocolBufferException {
         final Television tv = Television.newBuilder()
                 .setBrand("Samsung")
                 .setModel(2019)

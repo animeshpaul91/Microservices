@@ -12,7 +12,7 @@ public class SerializationDemo {
     private static final Logger log = LoggerFactory.getLogger(SerializationDemo.class);
     private static final Path PATH = Path.of("person.out");
 
-    public static void main(String[] args) throws IOException {
+    static void main(String[] args) throws IOException {
 
         // primitive values that are not assigned takes default values. It treats those fields to be non-existent.
         final Person person = Person.newBuilder()

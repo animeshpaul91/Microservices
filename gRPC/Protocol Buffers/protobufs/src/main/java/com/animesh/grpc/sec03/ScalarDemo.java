@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public class ScalarDemo {
     private static final Logger log = LoggerFactory.getLogger(ScalarDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Person person = Person.newBuilder()
                 .setLastName("Paul")
                 .setAge(32)

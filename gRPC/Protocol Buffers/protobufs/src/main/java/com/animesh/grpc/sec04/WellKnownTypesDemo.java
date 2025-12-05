@@ -11,7 +11,7 @@ import java.time.Instant;
 public class WellKnownTypesDemo {
     private static final Logger log = LoggerFactory.getLogger(WellKnownTypesDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Sample sample = Sample.newBuilder()
                 .setAge(Int32Value.of(123))
                 .setLoginTime(Timestamp.newBuilder()

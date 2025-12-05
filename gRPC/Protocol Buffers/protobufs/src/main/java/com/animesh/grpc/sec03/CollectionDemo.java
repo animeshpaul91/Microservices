@@ -10,7 +10,7 @@ import java.util.List;
 public class CollectionDemo {
     private static final Logger log = LoggerFactory.getLogger(CollectionDemo.class);
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         final Book book1 = Book.newBuilder()
                 .setTitle("Effective Java")
                 .setAuthor("Joshua Bloch")
