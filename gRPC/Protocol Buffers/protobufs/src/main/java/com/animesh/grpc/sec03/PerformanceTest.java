@@ -14,7 +14,7 @@ public class PerformanceTest {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Path PATH = Path.of("person.out");
 
-    public static void main(String[] args) throws IOException {
+    static void main(String[] args) throws IOException {
         final Person protoPerson = Person.newBuilder()
                 .setLastName("Paul")
                 .setAge(32)
@@ -34,7 +34,7 @@ public class PerformanceTest {
 //        for (int i = 0; i < 5; i++) {
 //            test("Proto", () -> proto(protoPerson));
 //            test("JSON", () -> json(jsonPerson));
-//            System.out.println("-----");
+//            IO.println("-----");
 //        }
     }
 
