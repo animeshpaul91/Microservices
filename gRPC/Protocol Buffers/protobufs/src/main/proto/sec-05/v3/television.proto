@@ -1,0 +1,19 @@
+syntax = "proto3";
+package sec05.v3;
+
+option java_multiple_files = true;
+option java_package = "com.animesh.grpc.sec05.v3.models";
+
+enum TelevisionType {
+    LED = 0;
+    UHD = 1;
+    OLED = 2;
+    QLED = 3;
+}
+
+// you can change the label and the serialization/deserialization logic will still take care of it
+// however, do NOT change the type of the field
+message Television {
+    string brand = 1;
+    TelevisionType type = 3;
+}
