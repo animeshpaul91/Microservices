@@ -1,8 +1,8 @@
 syntax = "proto3";
-package sec05.v3;
+package sec05.v4;
 
 option java_multiple_files = true;
-option java_package = "com.animesh.grpc.sec05.v3.models";
+option java_package = "com.animesh.grpc.sec05.v4.models";
 
 enum TelevisionType {
     LED = 0;
@@ -21,4 +21,7 @@ message Television {
     reserved "year", "model"; // previous field names that have been removed. Do NOT reuse them.
 
     TelevisionType type = 3;
+    int32 price = 4;
+
+    // best practice is to not change the number once assigned to a field
 }
