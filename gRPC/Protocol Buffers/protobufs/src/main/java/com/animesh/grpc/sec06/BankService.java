@@ -6,6 +6,7 @@ import com.animesh.grpc.sec06.models.BankServiceGrpc;
 import io.grpc.stub.StreamObserver;
 
 // Server side implementation of the BankService (Service Class)
+// This is not the Server
 public class BankService extends BankServiceGrpc.BankServiceImplBase {
     @Override
     public void getAccountBalance(BalanceCheckRequest request, StreamObserver<AccountBalance> responseObserver) {
