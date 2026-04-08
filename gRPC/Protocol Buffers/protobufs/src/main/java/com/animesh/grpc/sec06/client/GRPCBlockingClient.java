@@ -1,4 +1,4 @@
-package com.animesh.grpc.sec06.repository;
+package com.animesh.grpc.sec06.client;
 
 import com.animesh.grpc.sec06.models.BalanceCheckRequest;
 import com.animesh.grpc.sec06.models.BankServiceGrpc;
@@ -6,8 +6,8 @@ import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GRPCClient {
-    private static final Logger logger = LoggerFactory.getLogger(GRPCClient.class);
+public class GRPCBlockingClient {
+    private static final Logger logger = LoggerFactory.getLogger(GRPCBlockingClient.class);
 
     static void main() {
         final var channel = ManagedChannelBuilder.forAddress("localhost", 6565)
