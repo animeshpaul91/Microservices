@@ -14,11 +14,11 @@ public class GRPCClient {
                 .usePlaintext()
                 .build();
 
-        final var stub = BankServiceGrpc.newBlockingStub(channel);
+        final var bankServiceBlockingStub = BankServiceGrpc.newBlockingStub(channel);
         final var request = BalanceCheckRequest.newBuilder()
                 .setAccountNumber(2000542313)
                 .build();
-        final var balance = stub.getAccountBalance(request);
+        final var balance = bankServiceBlockingStub.getAccountBalance(request);
         logger.info("Received response: {}", balance);
     }
 }
