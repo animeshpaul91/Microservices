@@ -7,8 +7,10 @@ import com.animesh.grpc.sec06.models.BankServiceGrpc;
 import com.animesh.grpc.sec06.repository.AccountRepository;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
+import java.util.Map;
 
 // Server side implementation of the BankService (Service Class)
 // This is not the Server
@@ -16,10 +18,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
     @Override
     public void getAccountBalance(BalanceCheckRequest request, StreamObserver<AccountBalance> responseObserver) {
         final var accountNumber = request.getAccountNumber();
-        final var accountBalance = AccountBalance.newBuilder()
-                .setAccountNumber(accountNumber)
-                .setBalance(AccountRepository.getBalance(accountNumber))
-                .build();
+        final var accountBalance = getAccountBalance(accountNumber, AccountRepository.getBalance(accountNumber));
 
         responseObserver.onNext(accountBalance);
         responseObserver.onCompleted();
@@ -30,10 +29,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
         final List<AccountBalance> allAccounts = AccountRepository.getAccounts()
                 .entrySet()
                 .stream()
-                .map(entry -> AccountBalance.newBuilder()
-                        .setAccountNumber(entry.getKey())
-                        .setBalance(entry.getValue())
-                        .build()
+                .map(entry -> getAccountBalance(entry.getKey(), entry.getValue())
                 )
                 .toList();
 
@@ -43,5 +39,12 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
         responseObserver.onNext(allAccountsResponse);
         responseObserver.onCompleted();
+    }
+
+    private static AccountBalance getAccountBalance(Integer accountNumber, Integer accountBalance) {
+        return AccountBalance.newBuilder()
+                .setAccountNumber(accountNumber)
+                .setBalance(accountBalance)
+                .build();
     }
 }
