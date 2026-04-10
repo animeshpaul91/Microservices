@@ -8,6 +8,8 @@ import com.animesh.grpc.sec06.repository.AccountRepository;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 
+import java.util.List;
+
 // Server side implementation of the BankService (Service Class)
 // This is not the Server
 public class BankService extends BankServiceGrpc.BankServiceImplBase {
@@ -25,18 +27,21 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
     @Override
     public void getAllAccounts(Empty request, StreamObserver<AllAccountsResponse> responseObserver) {
-        final var allAccounts = AccountRepository.getAccounts()
+        final List<AccountBalance> allAccounts = AccountRepository.getAccounts()
                 .entrySet()
                 .stream()
                 .map(entry -> AccountBalance.newBuilder()
                         .setAccountNumber(entry.getKey())
-                        .setBalance(entry.getValue()))
+                        .setBalance(entry.getValue())
+                        .build()
+                )
                 .toList();
 
         final var allAccountsResponse = AllAccountsResponse.newBuilder()
-                        .addAllAccounts(allAccounts)
-                        .build();
+                .addAllAccounts(allAccounts)
+                .build();
 
-        responseObserver.onNext();
+        responseObserver.onNext(allAccountsResponse);
+        responseObserver.onCompleted();
     }
 }
