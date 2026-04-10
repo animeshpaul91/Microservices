@@ -15,7 +15,8 @@ public class GRPCClient {
                 .usePlaintext()
                 .build();
 
-        final var bankServiceStub = BankServiceGrpc.newStub(channel);
+        final var bankServiceStub = BankServiceGrpc.newStub(channel); // supports all streaming patterns
+
         final var request = BalanceCheckRequest.newBuilder()
                 .setAccountNumber(2000542313)
                 .build();

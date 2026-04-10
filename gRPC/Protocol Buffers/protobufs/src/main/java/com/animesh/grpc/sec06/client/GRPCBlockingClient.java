@@ -14,7 +14,7 @@ public class GRPCBlockingClient {
                 .usePlaintext()
                 .build();
 
-        final var bankServiceBlockingStub = BankServiceGrpc.newBlockingStub(channel);
+        final var bankServiceBlockingStub = BankServiceGrpc.newBlockingStub(channel); // only supports unary and server streaming patterns
         final var request = BalanceCheckRequest.newBuilder()
                 .setAccountNumber(2000542313)
                 .build();
