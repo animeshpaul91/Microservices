@@ -29,12 +29,13 @@ public class UnaryBlockingClientTest extends AbstractTest {
 
     @Test
     public void testAllAccounts() {
-        var emptyRequest = Empty.newBuilder().build();
+        var emptyRequest = Empty.getDefaultInstance();
 
         final AllAccountsResponse allAccounts = blockingStub.getAllAccounts(emptyRequest);
-        log.info("Received Unary Accounts: {}", allAccounts);
+        log.info("All Accounts Size: {}", allAccounts.getAccountsCount());
 
         final List<AccountBalance> accounts = allAccounts.getAccountsList();
+        assertEquals(10, accounts.size());
         accounts.forEach(account -> assertEquals(100, account.getBalance()));
     }
 }
