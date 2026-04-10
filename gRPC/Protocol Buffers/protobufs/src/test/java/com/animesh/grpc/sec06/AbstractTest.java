@@ -13,14 +13,22 @@ public class AbstractTest extends AbstractChannelTest {
 
     @BeforeAll
     public void setup() {
-        super.setup();
+        // start server
         this.grpcServer.start();
+
+        // start client
+        super.setup();
+
+        // initialize stub
         this.blockingStub = BankServiceGrpc.newBlockingStub(channel);
     }
 
     @AfterAll
     public void teardown() throws InterruptedException {
+        // stop client
         super.teardown();
+
+        // stop server
         this.grpcServer.stop();
     }
 }
