@@ -1,9 +1,14 @@
 package com.animesh.grpc.sec06;
 
+import com.animesh.grpc.sec06.models.AccountBalance;
+import com.animesh.grpc.sec06.models.AllAccountsResponse;
 import com.animesh.grpc.sec06.models.BalanceCheckRequest;
+import com.google.protobuf.Empty;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,9 +21,20 @@ public class UnaryBlockingClientTest extends AbstractTest {
                 .setAccountNumber(2000542313)
                 .build();
 
-        var unaryResponse = blockingStub.getAccountBalance(request);
-        log.info("Received Unary Balance: {}", unaryResponse);
+        final AccountBalance accountBalance = blockingStub.getAccountBalance(request);
+        log.info("Received Unary Balance: {}", accountBalance);
 
-        assertEquals(100,  unaryResponse.getBalance());
+        assertEquals(100, accountBalance.getBalance());
+    }
+
+    @Test
+    public void testAllAccounts() {
+        var emptyRequest = Empty.newBuilder().build();
+
+        final AllAccountsResponse allAccounts = blockingStub.getAllAccounts(emptyRequest);
+        log.info("Received Unary Accounts: {}", allAccounts);
+
+        final List<AccountBalance> accounts = allAccounts.getAccountsList();
+        accounts.forEach(account -> assertEquals(100, account.getBalance()));
     }
 }
