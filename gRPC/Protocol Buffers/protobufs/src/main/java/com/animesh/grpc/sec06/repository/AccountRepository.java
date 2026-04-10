@@ -1,5 +1,6 @@
 package com.animesh.grpc.sec06.repository;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -12,5 +13,9 @@ public class AccountRepository {
 
     public static int getBalance(int accountNumber) {
         return db.getOrDefault(accountNumber, 100);
+    }
+
+    public static Map<Integer, Integer> getAccounts() {
+        return Collections.unmodifiableMap(db);
     }
 }
