@@ -13,14 +13,14 @@ public abstract class AbstractChannelTest {
     protected ManagedChannel channel;
 
     @BeforeAll
-    public void setup() {
+    public void setupChannel() {
         this.channel = ManagedChannelBuilder.forAddress("localhost", 6565)
                 .usePlaintext()
                 .build();
     }
 
     @AfterAll
-    public void teardown() throws InterruptedException {
+    public void stopChannel() throws InterruptedException {
         this.channel.shutdown()
                 .awaitTermination(5, TimeUnit.SECONDS);
     }
