@@ -1,6 +1,6 @@
 package com.animesh.grpc.sec06;
 
-import com.animesh.grpc.common.AccountBalanceObserverTest;
+import com.animesh.grpc.common.ResponseObserver;
 import com.animesh.grpc.sec06.models.BalanceCheckRequest;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -17,8 +17,6 @@ public class UnaryAsyncClientTest extends AbstractTest {
                 .setAccountNumber(2000542313)
                 .build();
 
-        final CountDownLatch latch = new CountDownLatch(1);
-        this.asyncStub.getAccountBalance(request, new AccountBalanceObserverTest(latch));
-        latch.await();
+        this.asyncStub.getAccountBalance(request, ResponseObserver.create());
     }
 }
