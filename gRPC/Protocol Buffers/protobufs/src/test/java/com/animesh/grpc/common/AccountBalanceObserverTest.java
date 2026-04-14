@@ -20,18 +20,18 @@ public class AccountBalanceObserverTest implements StreamObserver<AccountBalance
     @Override
     public void onNext(AccountBalance accountBalance) {
         final var balance = accountBalance.getBalance();
-        log.debug("Received Account Balance: {}", balance);
+        log.info("Received Account Balance: {}", balance);
         assertEquals(100, balance);
         this.latch.countDown();
     }
 
     @Override
     public void onError(Throwable throwable) {
-        log.error("Error in AccountBalanceStreamObserver", throwable);
+        log.info("Error in AccountBalanceStreamObserver", throwable);
     }
 
     @Override
     public void onCompleted() {
-        log.debug("Completed AccountBalanceStreamObserver");
+        log.info("Completed AccountBalanceStreamObserver");
     }
 }
