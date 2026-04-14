@@ -10,6 +10,7 @@ public class AbstractTest extends AbstractChannelTest {
 
     private final GRPCServer grpcServer = GRPCServer.create(new BankService());
     protected BankServiceGrpc.BankServiceBlockingStub blockingStub;
+    protected BankServiceGrpc.BankServiceStub asyncStub;
 
     @BeforeAll
     public void setup() {
@@ -17,6 +18,7 @@ public class AbstractTest extends AbstractChannelTest {
         this.grpcServer.start();
 
         // initialize stub
+        this.asyncStub = BankServiceGrpc.newStub(channel);
         this.blockingStub = BankServiceGrpc.newBlockingStub(channel);
     }
 
