@@ -41,7 +41,7 @@ public class UnaryAsyncClientTest extends AbstractTest {
 
         // at this point either list or error will be populated
         assertEquals(1, accountBalanceObserver.getList().size());
-        assertEquals(10, accountBalanceObserver.getList().getFirst().getAccountsList().size());
+        assertEquals(10, accountBalanceObserver.getList().getFirst().getAccountsCount());
         assertEquals(100, accountBalanceObserver.getList().getFirst().getAccountsList().getFirst().getBalance());
         assertNull(accountBalanceObserver.getError());
     }
