@@ -1,6 +1,5 @@
 package com.animesh.grpc.common;
 
-import com.animesh.grpc.sec06.models.AccountBalance;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ResponseObserver<T> implements StreamObserver<T> {
     private static final Logger log = LoggerFactory.getLogger(ResponseObserver.class);
